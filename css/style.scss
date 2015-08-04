@@ -1,0 +1,44 @@
+.issues-list .issue__title,
+.milestones-list .milestone__title {
+	margin-bottom:0;
+}
+
+.issue__label {
+	padding:0 .5em .25em;
+}
+
+.issue__details,
+.milestone__details {
+	margin-top:0;
+	margin-bottom:0;
+	list-style:none;
+	padding-left:0;
+}
+
+.milestone__issue-item {
+	 &.open {
+	 	// color:#0F0;
+	 }
+
+	 &.closed {
+	 	// color: #F00;
+	 	text-decoration:line-through;
+	 }
+}
+
+.issue__details__milestone {}
+.issue__details__milestone--closed { 
+	text-decoration:line-through;
+}
+
+.issue__body {
+	font-size:80%;
+}
+
+/* PAGINATION */
+.gh-pagination { overflow:auto; margin-top:1em; margin-bottom:1em; }
+.gh-pagination__link { max-width:50%; }
+.gh-pagination__link--next { float:right; }
+.gh-pagination__link--prev { float:left; }
+
+.gh-result-count { font-weight:bold; }
