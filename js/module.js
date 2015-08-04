@@ -1,0 +1,1 @@
+var pipeline = angular.module('pipeline', []);
