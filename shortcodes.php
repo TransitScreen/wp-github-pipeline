@@ -60,7 +60,7 @@ function print_milestone_issues($issues) {
 function issues_func( $atts ) {
 
 	#if a search term was entered do nothing.
-	if ( !empty($_POST['gh_searchterm']) )
+	if ( !empty($_GET['gh_searchterm']) )
 		return;
 
 	$atts = shortcode_atts( array(
@@ -108,10 +108,27 @@ function prepend_page_count( $string, $Github, $on_page_count) {
  * @return string
  */
 function append_page_links($string, $Client) {
-	$pagination = '';
+
+	$query = (!empty($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : NULL;
+
+	#remove previous page query param
+	if (!empty($_GET['gh_page']))
+		$query = str_replace('gh_page='.$_GET['gh_page'], '', $query);
+
+	$page_url = get_the_permalink();
+
+	if ($query)
+		$page_url .= '?'.$query;
+
+	$punc = ($query) ? '&' : '?';
+
+	$prev_url = $page_url . $punc . 'gh_page='.($Client->page-1);
+	$next_url = $page_url . $punc . 'gh_page='.($Client->page+1);
+
 	#add either next or prev link
-	$pagination .= ($Client->has_prev_page ) ? '<a class="gh-pagination__link gh-pagination__link--prev" href="'.get_the_permalink().'?page='.($Client->page-1).'">&larr; Previous</a>' : NULL;
-	$pagination .= ($Client->has_next_page ) ? '<a class="gh-pagination__link gh-pagination__link--next" href="'.get_the_permalink().'?page='.($Client->page+1).'">Next &rarr;</a>' : NULL;
+	$pagination = '';
+	$pagination .= ($Client->has_prev_page ) ? '<a class="gh-pagination__link gh-pagination__link--prev" href="'.$prev_url.'">&larr; Previous</a>' : NULL;
+	$pagination .= ($Client->has_next_page ) ? '<a class="gh-pagination__link gh-pagination__link--next" href="'.$next_url.'">Next &rarr;</a>' : NULL;
 	# wrap either/both with div
 	$newstring = ( $pagination ) ? $string . '<div class="gh-pagination">' . $pagination . '</div>' : $string;
 
@@ -165,9 +182,10 @@ function build_labels( $labels ) {
 }
 
 function print_search_form() {
+	$value = (!empty($_GET['gh_searchterm'])) ? $_GET['gh_searchterm'] : NULL;
 	?>
-	<form class="issue-searchform" method="POST" action="<?php the_permalink() ?>">
-		<input type="text" name="gh_searchterm" value="<?php echo (isset($_POST['gh_searchterm'])) ? $_POST['gh_searchterm'] : NULL; ?>" />
+	<form class="issue-searchform" method="GET" action="<?php the_permalink() ?>">
+		<input type="text" name="gh_searchterm" value="<?php echo $value; ?>" />
 		<input type="submit" value="Search" />
 	</form>
 	<?php	
@@ -176,6 +194,11 @@ function print_search_form() {
 function searchform_func( $atts ) {
 	$atts = shortcode_atts( array(
 		'placeholder' => NULL,
+		'type' => NULL,
+		'in' => NULL,
+		'labels'=>NULL,
+		'state'=>NULL,
+		'show_body'=>FALSE
 	), $atts, 'gh_searchform' );
 	
 	$gh = new Github();
@@ -187,25 +210,29 @@ function searchform_func( $atts ) {
 
 	print_search_form();
 
-	if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-		if (strlen( $_POST['gh_searchterm'] ) < 2) {
+	if ( !empty($_GET['gh_searchterm'] )) {
+		if (strlen( $_GET['gh_searchterm'] ) < 2) {
 			$msg = 'Search term is too short!';
 			$results = 0;
 
 		} else {
 
-			$issues = $gh->search_issues(array('term'=>$_POST['gh_searchterm']));
+			$atts['term'] = $_GET['gh_searchterm'];
+
+			$issues = $gh->search_issues( $atts );
 			$results = count($issues);
 			$msg = "Results: " . $results;
 
 		}
 	
-
 	}
 
 	echo '<div class="gh_searchform__msg">' . $msg . '</div>';
 
-	return (!empty($issues)) ? format_issues($issues) : NULL;
+	$return = (!empty($issues)) ? format_issues($issues, $atts['show_body']) : NULL;
+	$return = append_page_links($return, $gh);
+
+	return $return;
 
 }
 add_shortcode( 'gh_searchform', 'searchform_func' );
