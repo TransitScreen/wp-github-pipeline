@@ -37,8 +37,8 @@ class Github {
 		$this->per_page = 50;
 
 		#set up for paginated results
-		if ( get_query_var( 'page' ) )
-			$this->page = get_query_var( 'page' );
+		if ( !empty($_GET['gh_page'] ) )
+			$this->page = $_GET['gh_page'];
 
 
 
@@ -69,46 +69,56 @@ class Github {
 	public function search_issues($options=array()) {
 
 		$default_options = array(
-							// 'labels'=>'',
-							'term' => '', 
+							'type' => NULL, # issue | pr
+							'in' => NULL, # which fields are searched: title|body|comment (or combo)
+							'labels'=>NULL,
+							'term' => NULL, 
 							'state'=>'all',
+							// 'page' => $this->page
 							);
 		
 		$params = array_merge($default_options, $options);
 		$state = $params['state'];
 		$term = $params['term'];
-		
-		// $this->client->api->setPerPage(50);
+				
+		#add label filter if present
+		if ($params['labels']){
+			$labels = explode(",", $params['labels']);
+			foreach ($labels as $label){
+				$term .= " label:{$label}";
+			}
+		}
+
+		#limit results to this repo
+		$term .= " user:{$this->repo}";
+
+
 		$paginator = new Github\ResultPager($this->client);
 		
-
-		// $issues = $this->client->api('issue')->all($this->org, $this->repo, $params);
-
-		//TODO: Add page links instead of full list
-		$issues = $paginator->fetchAll($this->client->api('issue'), 'find', array($this->org, $this->repo, $state, $term));
-		$issues = $this->add_label_details( $issues['issues'] );
-		// $issues = $client->api('issue')->find('KnpLabs', 'php-github-api', 'closed', 'bug');
+		$issues = $paginator->fetchAll( $this->client->api('search'), 'issues', array($term)); #can take two more params sort/order
+		
 		return $issues;
 	}
 
-	private function add_label_details($issues) {
-		$labels_list = $this->client->api('issue')->labels()->all($this->org, $this->repo);
-		// error_log(json_encode($labels));
-		foreach ($issues as &$issue){
-			$new_labels = array();
-			foreach ($issue['labels'] as &$label){
+	// # depricated. This was used to regularize the legacy search results
+	// private function add_label_details($issues) {
+	// 	$labels_list = $this->client->api('issue')->labels()->all($this->org, $this->repo);
+	// 	// error_log(json_encode($labels));
+	// 	foreach ($issues as &$issue){
+	// 		$new_labels = array();
+	// 		foreach ($issue['labels'] as &$label){
 				
-				foreach ($labels_list as $label_item) {
-					if ( $label_item['name'] === $label ) {
-						$new_labels[] = $label_item;
-						break;
-					}
-				}
-			}
-			$issue['labels'] = $new_labels;
-		}
-		return $issues;
-	}
+	// 			foreach ($labels_list as $label_item) {
+	// 				if ( $label_item['name'] === $label ) {
+	// 					$new_labels[] = $label_item;
+	// 					break;
+	// 				}
+	// 			}
+	// 		}
+	// 		$issue['labels'] = $new_labels;
+	// 	}
+	// 	return $issues;
+	// }
 
 
 	public function get_milestones($options=array()) {
