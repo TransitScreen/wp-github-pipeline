@@ -19,7 +19,7 @@ The goals was to be as versatile as possible while still being quick and easy to
 
 `[gh_milestones state="open|closed|all"]`
 
-`[gh_searchform]`
+`[gh_searchform labels="foo,bar" state="ALL|open|closed"]`
 
 You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues will appear on the page until the user enters a search, then the page will display the results from the search.
 
@@ -27,11 +27,8 @@ You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues
 This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) by KNP Labs
 
 ## TODO:
-* Paginate results
-* Update search to use new gitHub search endpoint
-* Add assigned to search results?
-* Remove 10 result limit on search
 * View issue comments
+* user-specific GH credentials
 
 ## Backlog
 * Make CSS inclusion optional
