@@ -79,11 +79,6 @@ function issues_func( $atts ) {
 
 	$issues = $gh->get_issues($atts);
 	
-	#load necessary scripts if we're toggling
-	if ($atts['show_body']=='toggle'){
-		wp_enqueue_script( 'toggle' );
-	}
-
 	$return = format_issues($issues, $atts['show_body']);
 	$return = prepend_page_count($return, $gh, count($issues) );
 	$return = append_page_links($return, $gh);
@@ -142,6 +137,11 @@ function format_issues( $issues, $body=false ) {
 
 	if (empty($issues))
 		return;
+
+	#load necessary scripts if we're toggling
+	if (strtolower($body)==='toggle'){
+		wp_enqueue_script( 'toggle' );
+	}
 
 	$return = '<div class="issues-list">';
 
