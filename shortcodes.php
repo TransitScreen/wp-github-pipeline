@@ -17,6 +17,9 @@ add_shortcode( 'gh_milestones', 'milestones_func' );
 
 function format_milestones( $milestones ) {
 
+	if (empty($milestones))
+		return;
+
 	$return = '<div class="milestones-list">';
 
 	foreach ($milestones as $milestone) {
@@ -136,6 +139,9 @@ function append_page_links($string, $Client) {
 }
 
 function format_issues( $issues, $body=false ) {
+
+	if (empty($issues))
+		return;
 
 	$return = '<div class="issues-list">';
 
