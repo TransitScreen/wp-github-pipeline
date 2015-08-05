@@ -12,7 +12,7 @@ class Github {
 	private $gh_password;
 	public $labels;
 	public $has_settings = FALSE;
-	public $missing_settings_msg = '<h2>Missing GitHub settings!</h2>';
+	public $missing_settings_msg;
 	public $page = 1;
 	public $has_next_page = NULL;
 	public $has_prev_page = NULL;
@@ -68,9 +68,12 @@ class Github {
 
 		$paginator = new Github\ResultPager($this->client);
 
-		//This is how to get ALL (unpaginated)
-		// $issues = $paginator->fetchAll($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
-		$issues = $paginator->fetch($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
+		try {
+			$issues = $paginator->fetch($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
+		} catch (Exception $e) {
+			echo "Error! " . $e->getMessage();
+			return;
+		}
 		
 		$this->has_next_page = $paginator->hasNext();
 		$this->has_prev_page = $paginator->hasPrevious();
@@ -107,31 +110,15 @@ class Github {
 
 		$paginator = new Github\ResultPager($this->client);
 		
-		$issues = $paginator->fetchAll( $this->client->api('search'), 'issues', array($term)); #can take two more params sort/order
-		
+		try {
+			$issues = $paginator->fetchAll( $this->client->api('search'), 'issues', array($term)); #can take two more params sort/order
+		} catch (Exception $e) {
+			echo "Error! " . $e->getMessage();
+			return;
+		}
+
 		return $issues;
 	}
-
-	// # depricated. This was used to regularize the legacy search results
-	// private function add_label_details($issues) {
-	// 	$labels_list = $this->client->api('issue')->labels()->all($this->org, $this->repo);
-	// 	// error_log(json_encode($labels));
-	// 	foreach ($issues as &$issue){
-	// 		$new_labels = array();
-	// 		foreach ($issue['labels'] as &$label){
-				
-	// 			foreach ($labels_list as $label_item) {
-	// 				if ( $label_item['name'] === $label ) {
-	// 					$new_labels[] = $label_item;
-	// 					break;
-	// 				}
-	// 			}
-	// 		}
-	// 		$issue['labels'] = $new_labels;
-	// 	}
-	// 	return $issues;
-	// }
-
 
 	public function get_milestones($options=array()) {
 
@@ -144,9 +131,15 @@ class Github {
 
 		$paginator = new Github\ResultPager($this->client);
 
-		//TODO: Add page links instead of full list
-		$milestones = $paginator->fetchAll($this->client->api('issue')->milestones(), 'all', array($this->org, $this->repo, $params));
+		//TODO: Add page links instead of full list?
+		try {
+			$milestones = $paginator->fetchAll($this->client->api('issue')->milestones(), 'all', array($this->org, $this->repo, $params));
+		} catch (Exception $e) {
+			echo "Error! " . $e->getMessage();
+			return;
+		}
 
+		// $milestones = (!empty($milestones)) ? $milestones : array();
 		foreach ($milestones as &$milestone) {
 			$issues = $this->_get_milestone_info($milestone['number']);
 			$milestone['issues'] = $issues;
@@ -170,6 +163,14 @@ class Github {
 				$this->gh_password
 			)
 			$this->has_settings = TRUE;
+			
+			$msg = "<h2>Missing GitHub settings!</h2>";
+			if ($this->single_user_mode) {
+				$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a> and/or the GitHub credentials on <a href='".get_edit_user_link()."'>your profile page</a></p>";
+			} else {
+				$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a></p>";
+			}
+			$this->missing_settings_msg = $msg;
 
 		return $this->has_settings;
 	}
