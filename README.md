@@ -30,6 +30,7 @@ The current implementation allows unencrypted GitHub passwords to be stored in t
 This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) by KNP Labs
 
 ## TODO:
+* Make CSS include optional
 * View issue comments
 * user-specific GH credentials
 * Don't store unencrypted GitHub passwords
