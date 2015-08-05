@@ -166,9 +166,9 @@ class Github {
 			
 			$msg = "<h2>Missing GitHub settings!</h2>";
 			if ($this->single_user_mode) {
-				$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a> and/or the GitHub credentials on <a href='".get_edit_user_link()."'>your profile page</a></p>";
-			} else {
 				$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a></p>";
+			} else {
+				$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a> and/or the GitHub credentials on <a href='".get_edit_user_link()."'>your profile page</a></p>";
 			}
 			$this->missing_settings_msg = $msg;
 
