@@ -150,7 +150,7 @@ function register_wpghdash_script() {
 }
 
 # Here we wrap the content with a div with the Angular ng-app attribute
-add_filter('the_content', 'wpghdash_wrap_ng_app');
+add_filter('the_content', 'wpghdash_wrap_ng_app', 999);
 function wpghdash_wrap_ng_app($content) {
         return '<div class="pipeline-wrap" ng-app="pipeline">'.$content . '</div>';
 }
