@@ -51,6 +51,7 @@ function wpghdash_plugin_options() {
 
 			<input type="hidden" name="action" value="update_wpghdash_settings" />
 
+
 			<h3>GitHub Repository Info</h3>
 			<p>
 			<label>GitHub Organization:</label>
@@ -64,18 +65,31 @@ function wpghdash_plugin_options() {
 
 			<a href="https://github.com/settings/applications/new">Register a new gitHub application...</a>
 			
+			<h3>GitHub Authorization Style</h3>
+			Many requests to the GitHub API require user authentication. There are two ways to do this. By default, each
+			Wordpress user must have a GitHub account and enter those credentials under the GitHub Credentials section. 
+			This is allows more control over permissions, but also means we need to store GitHub passwords in the database, 
+			which sucks from a security standpoint. If you enable <i>Single user</i> below you can create a throw-away GitHub 
+			user account and then only those credentials will be stored.
+			<p>
+				<input type="hidden" name="wpghdash_auth_single_user" value=0 />
+				<input type="checkbox" name="wpghdash_auth_single_user" value=1 <?php echo (get_option('wpghdash_auth_single_user')) ? "checked" : NULL; ?>/> Enable single user authentication</label>
+			</p>
 
+
+			<?php if (get_option('wpghdash_auth_single_user')) : ?>
 			<!-- fields for credentials -->
-			<h3>GitHub Global User Credentials</h3>
+			<h3>GitHub Single User Credentials</h3>
 			Enter the credentials for the gitHub user account that Pipeline will use to interact with GitHub.
 			<p>
-			<label>GitHub Global User:</label>
+			<label>GitHub Single User Name:</label>
 			<input class="" type="text" name="wpghdash_client_id" value="<?php echo get_option('wpghdash_client_id'); ?>" />
 			</p>
 			<p>
-			<label>GitHub Global Password:</label>
-			<input class="" type="text" name="wpghdash_client_secret" value="<?php echo get_option('wpghdash_client_secret'); ?>" />
+			<label>GitHub Single User Password:</label>
+			<input class="" type="password" name="wpghdash_client_secret" value="<?php echo get_option('wpghdash_client_secret'); ?>" />
 			</p>
+			<?php endif; ?>
 
 			<input class="button button-primary" type="submit" value="Save" />
 		</form>
@@ -92,11 +106,17 @@ function wpghdash_handle_request() {
 	$client_secret = (!empty($_POST['wpghdash_client_secret'])) ? $_POST['wpghdash_client_secret'] : NULL;
 	$repo = (!empty($_POST['wpghdash_gh_repo'])) ? $_POST['wpghdash_gh_repo'] : NULL;
 	$org = (!empty($_POST['wpghdash_gh_org'])) ? $_POST['wpghdash_gh_org'] : NULL;
+	$singleuser = (!empty($_POST['wpghdash_auth_single_user'])) ? $_POST['wpghdash_auth_single_user'] : NULL;
 
-	update_option( 'wpghdash_client_id', $client_id, TRUE );
-	update_option( 'wpghdash_client_secret', $client_secret, TRUE );
+	#don't unset values when these aren't included in the form
+	if ($client_id || $client_secret){
+		update_option( 'wpghdash_client_id', $client_id, TRUE );
+		update_option( 'wpghdash_client_secret', $client_secret, TRUE );
+	}
+	
 	update_option( 'wpghdash_gh_repo', $repo, TRUE );
 	update_option('wpghdash_gh_org', $org, TRUE);
+	update_option( 'wpghdash_auth_single_user', $singleuser, TRUE);
 
 	#redirect back to page
 	$redirect_url = get_bloginfo('url') . "/wp-admin/options-general.php?page=wpghdash&status=success";
@@ -135,6 +155,42 @@ function wpghdash_wrap_ng_app($content) {
         return '<div class="pipeline-wrap" ng-app="pipeline">'.$content . '</div>';
 }
 
+/**
+ADD THE GITHUB CREDENTIAL FIELDS TO USER PROFILE PAGE
+*/
+add_action( 'show_user_profile', 'wpghdash_extra_user_profile_fields' );
+add_action( 'edit_user_profile', 'wpghdash_extra_user_profile_fields' );
+add_action( 'personal_options_update', 'wpghdash_save_extra_user_profile_fields' );
+add_action( 'edit_user_profile_update', 'wpghdash_save_extra_user_profile_fields' );
+ 
+function wpghdash_save_extra_user_profile_fields( $user_id )
+ {
+ if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
+ 	update_user_meta( $user_id, 'wpghdash_gh_username', $_POST['wpghdash_gh_username'] );
+ 	update_user_meta( $user_id, 'wpghdash_gh_pwd', $_POST['wpghdash_gh_pwd'] );
+ }
+#Developed By wpghdash , http://wpghdash.com
+function wpghdash_extra_user_profile_fields( $user )
+{ ?>
+	<h3>GitHub Credentials</h3>
+
+	<table class="form-table">
+	<tr>
+	<th><label for="wpghdash_gh_username">GitHub User Name</label></th>
+	<td>
+	<input type="text" id="wpghdash_gh_username" name="wpghdash_gh_username" size="20" value="<?php echo esc_attr( get_the_author_meta( 'wpghdash_gh_username', $user->ID )); ?>">
+	<span class="description">Your GitHub username, eg: emersonthis</span>
+	</td>
+	</tr>
+	<tr>
+	<th><label for="wpghdash_gh_pwd">GitHub Password</label></th>
+	<td>
+	<input type="password" id="wpghdash_gh_pwd" name="wpghdash_gh_pwd" size="20" value="<?php echo esc_attr( get_the_author_meta( 'wpghdash_gh_pwd', $user->ID )); ?>">
+	<span class="description">Your GitHub password</span>
+	</td>
+	</tr>
+	</table>
+<?php }
 
 require_once 'vendor/autoload.php';
 require_once('shortcodes.php');
