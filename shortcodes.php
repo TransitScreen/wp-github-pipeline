@@ -187,14 +187,13 @@ function build_labels( $labels ) {
 	return $return;
 }
 
-function print_search_form() {
+function build_search_form() {
 	$value = (!empty($_GET['gh_searchterm'])) ? $_GET['gh_searchterm'] : NULL;
-	?>
-	<form class="issue-searchform" method="GET" action="<?php the_permalink() ?>">
-		<input type="text" name="gh_searchterm" value="<?php echo $value; ?>" />
-		<input type="submit" value="Search" />
-	</form>
-	<?php	
+	$return = '';
+	$return .= '<form class="issue-searchform" method="GET" action="'. get_the_permalink() .'">';
+	$return .= '<input type="text" name="gh_searchterm" value="'. $value .'" />';
+	$return .= '<input type="submit" value="Search" /></form>';
+	return $return;
 }
 
 function searchform_func( $atts ) {
@@ -214,7 +213,7 @@ function searchform_func( $atts ) {
 	$results = NULL;
 	$msg = 'Enter a search term to begin.';
 
-	print_search_form();
+	$return = build_search_form();
 
 	if ( !empty($_GET['gh_searchterm'] )) {
 		if (strlen( $_GET['gh_searchterm'] ) < 2) {
@@ -233,10 +232,10 @@ function searchform_func( $atts ) {
 	
 	}
 
-	echo '<div class="gh_searchform__msg">' . $msg . '</div>';
+	$return .= '<div class="gh_searchform__msg">' . $msg . '</div>';
 
-	$return = (!empty($issues)) ? format_issues($issues, $atts['show_body']) : NULL;
-	$return = append_page_links($return, $gh);
+	$return .= (!empty($issues)) ? format_issues($issues, $atts['show_body']) : NULL;
+	// $return .= append_page_links($return, $gh);
 
 	return $return;
 
