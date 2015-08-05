@@ -1,12 +1,5 @@
 {
-	"repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/TransitScreen/php-github-api"
-        }
-    ],
     "require": {
-        "knplabs/github-api": "dev-newsearch"
-    },
-    "minimum-stability": "dev"
+        "knplabs/github-api": "dev-master"
+    }
 }
