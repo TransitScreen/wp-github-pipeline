@@ -1,0 +1,20 @@
+{
+  "name": "wp-github-pipeline",
+  "version": "0.1.0",
+  "homepage": "https://github.com/TransitScreen/wp-github-pipeline",
+  "authors": [
+    "Emerson This <e@transitscreen.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.4.3"
+  }
+}

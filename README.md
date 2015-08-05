@@ -23,12 +23,16 @@ The goals was to be as versatile as possible while still being quick and easy to
 
 You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues will appear on the page until the user enters a search, then the page will display the results from the search.
 
+## Disclaimer
+The current implementation allows unencrypted GitHub passwords to be stored in the database when using the option to authenticate individual users to GitHub. This means that if your site is hacked and a malicious user gains access to your database, they can learn your GitHub password. The likelihood of this happening depends on the security of your environment. If this scares you, create a throw-away GitHub user and enter those credentials with the single-user configuration option.
+
 ## Acknowlegements.
 This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) by KNP Labs
 
 ## TODO:
 * View issue comments
 * user-specific GH credentials
+* Don't store unencrypted GitHub passwords
 
 ## Backlog
 * Make CSS inclusion optional

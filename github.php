@@ -7,6 +7,7 @@ class Github {
 	protected $client;
 	protected $org;
 	protected $repo;
+	public $single_user_mode;
 	private $gh_username;
 	private $gh_password;
 	public $labels;
@@ -21,11 +22,22 @@ class Github {
 
 		$this->repo = get_option('wpghdash_gh_repo');
 		$this->org = get_option('wpghdash_gh_org');
-		//TODO: make it user meta from currentuser
-		//http://www.paulund.co.uk/add-custom-user-profile-fields
-		//http://davidwalsh.name/add-profile-fields
-		$this->gh_username = get_option('wpghdash_client_id');
-		$this->gh_password = get_option('wpghdash_client_secret');
+
+		$this->single_user_mode = ( get_option('wpghdash_auth_single_user') ) ? TRUE : FALSE;
+
+		#set credentials
+		if ( $this->single_user_mode ) {
+			$this->gh_username = get_option('wpghdash_client_id');
+			$this->gh_password = get_option('wpghdash_client_secret');
+		} else {
+	    	
+	    	$current_user = wp_get_current_user();
+     		if ( !($current_user instanceof WP_User) ) #safety
+				return;
+
+			$this->gh_username = get_user_meta($current_user->ID, 'wpghdash_gh_username', TRUE);
+			$this->gh_password = get_user_meta($current_user->ID, 'wpghdash_gh_pwd', TRUE);
+		}
 
 		$this->check_for_settings();
 
