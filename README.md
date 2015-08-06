@@ -26,6 +26,9 @@ You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues
 ## Disclaimer
 The current implementation allows unencrypted GitHub passwords to be stored in the database when using the option to authenticate individual users to GitHub. This means that if your site is hacked and a malicious user gains access to your database, they can learn your GitHub password. The likelihood of this happening depends on the security of your environment. If this scares you, create a throw-away GitHub user and enter those credentials with the single-user configuration option.
 
+## Tips
+* Wordpress offers many ways to manage access/privacy. But If you are setting up a tool for internal use by your team only, a plugin like [Private Only](https://wordpress.org/plugins/private-only/) may come in handy.
+
 ## Acknowlegements.
 This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) by KNP Labs
 
