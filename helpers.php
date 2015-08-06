@@ -63,7 +63,7 @@ function build_search_form($placeholder=NULL) {
 	$value = (!empty($_GET['gh_searchterm'])) ? $_GET['gh_searchterm'] : NULL;
 	$return = '';
 	$return .= '<form class="issue-searchform" method="GET" action="'. get_the_permalink() .'">';
-	$return .= '<input type="text" name="gh_searchterm" value="'. $value .'" placeholder="'.$placeholder.'" />';
+	$return .= '<input type="text" name="gh_searchterm" value="'. $value .'" placeholder="'.$placeholder.'" /> ';
 	$return .= '<input type="submit" value="Search" /></form>';
 	return $return;
 }
