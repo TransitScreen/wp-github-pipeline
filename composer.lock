@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0e31b5e78c5db8572c913591326b6c05",
+    "hash": "986df69a0a8e1e9ec2ba141e5e6ea23e",
     "packages": [
         {
             "name": "guzzle/guzzle",
-            "version": "v3.9.3",
+            "version": "v3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle3.git",
-                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9"
+                "reference": "e4d12d7d6acccf75a5e504114e2df9195e494108"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/0645b70d953bc1c067bbc8d5bc53194706b628d9",
-                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/e4d12d7d6acccf75a5e504114e2df9195e494108",
+                "reference": "e4d12d7d6acccf75a5e504114e2df9195e494108",
                 "shasum": ""
             },
             "require": {
@@ -58,13 +58,10 @@
                 "zendframework/zend-cache": "2.*,<2.3",
                 "zendframework/zend-log": "2.*,<2.3"
             },
-            "suggest": {
-                "guzzlehttp/guzzle": "Guzzle 5 has moved to a new package name. The package you have installed, Guzzle 3, is deprecated."
-            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.9-dev"
+                    "dev-master": "3.8-dev"
                 }
             },
             "autoload": {
@@ -88,7 +85,7 @@
                     "homepage": "https://github.com/guzzle/guzzle/contributors"
                 }
             ],
-            "description": "PHP HTTP client. This library is deprecated in favor of https://packagist.org/packages/guzzlehttp/guzzle",
+            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
             "homepage": "http://guzzlephp.org/",
             "keywords": [
                 "client",
@@ -99,7 +96,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2015-03-18 18:23:50"
+            "time": "2014-04-23 21:43:40"
         },
         {
             "name": "knplabs/github-api",
@@ -107,12 +104,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "93684a10f1f5c3b00b7717e19965564f1e92d376"
+                "reference": "fccb5164bba691157b779a452d8a383b514ab209"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/93684a10f1f5c3b00b7717e19965564f1e92d376",
-                "reference": "93684a10f1f5c3b00b7717e19965564f1e92d376",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/fccb5164bba691157b779a452d8a383b514ab209",
+                "reference": "fccb5164bba691157b779a452d8a383b514ab209",
                 "shasum": ""
             },
             "require": {
@@ -160,7 +157,7 @@
                 "gist",
                 "github"
             ],
-            "time": "2015-08-03 12:29:13"
+            "time": "2015-08-06 09:36:33"
         },
         {
             "name": "symfony/event-dispatcher",

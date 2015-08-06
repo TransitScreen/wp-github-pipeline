@@ -1,5 +1,11 @@
 {
     "require": {
-        "knplabs/github-api": "dev-master"
+        "knplabs/github-api": "dev-master",
+        "guzzle/guzzle": "3.9"
+    },
+    "autoload": {
+    	"psr-0": {
+    		"guzzle": "src/"
+    	}
     }
 }
