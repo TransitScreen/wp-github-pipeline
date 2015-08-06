@@ -9,4 +9,3 @@ bin
 .sass-cache
 wp-content/uploads/*
 node_modules
-vendor/**
