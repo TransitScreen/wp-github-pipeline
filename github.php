@@ -29,11 +29,14 @@ class Github {
 
 		$this->token = get_option('wpghdash_token');
 
+		$this->client = new \Github\Client();
+
 		$this->check_for_settings();
 
-		$this->client = new \Github\Client();
+		$this->missing_settings_msg = "<h2>Missing GitHub settings!</h2><p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a></p>";
 		
-		$auth = $this->client->authenticate( $this->token, NULL, Github\Client::AUTH_HTTP_TOKEN);
+		if ($this->token)
+			$auth = $this->client->authenticate( $this->token, NULL, Github\Client::AUTH_HTTP_TOKEN);
 		
 		//TODO: This should be configurable
 		$this->per_page = 50;
@@ -144,19 +147,40 @@ class Github {
 		return $issues;
 	}
 
+	/**
+	 * Check for the mandatory settings.
+	 * If token is missing, check if repo is public and then save
+	 * @return bool
+	 */
 	public function check_for_settings($error=TRUE){
-		if (	$this->repo && 
+
+		if (	
+				$this->repo && 
 				$this->org && 
 				// $this->gh_username && 
 				// $this->gh_password
 				$this->token
-			)
-			$this->has_settings = TRUE;
-			
-			$msg = "<h2>Missing GitHub settings!</h2>";
-			$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a></p>";
+			) {
 
-			$this->missing_settings_msg = $msg;
+			$this->has_settings = TRUE;
+
+		} elseif (
+				$this->repo &&
+				$this->org &&
+				get_option('wpghdash_repo_is_public')
+			) {
+
+			$this->has_settings = TRUE;
+
+		} 
+		// 	elseif (
+		// 		$this->repo && 
+		// 		$this->org && 
+		// 		$this->repo_is_public( $this->org, $this->repo )
+		// 	) {
+
+		// 	$this->has_settings = TRUE;
+		// }
 
 		return $this->has_settings;
 	}

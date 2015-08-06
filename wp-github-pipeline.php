@@ -124,21 +124,38 @@ function wpghdash_handle_save() {
 	$org = (!empty($_POST['wpghdash_gh_org'])) ? $_POST['wpghdash_gh_org'] : NULL;
 	$singleuser = (!empty($_POST['wpghdash_auth_single_user'])) ? $_POST['wpghdash_auth_single_user'] : NULL;
 
-	#don't unset values when these aren't included in the form
-	// if ($client_id || $client_secret){
-		update_option( 'wpghdash_client_id', $client_id, TRUE );
-		update_option( 'wpghdash_client_secret', $client_secret, TRUE );
-	// }
-	
+	update_option( 'wpghdash_client_id', $client_id, TRUE );
+	update_option( 'wpghdash_client_secret', $client_secret, TRUE );
 	update_option( 'wpghdash_gh_repo', $repo, TRUE );
 	update_option('wpghdash_gh_org', $org, TRUE);
-	update_option( 'wpghdash_auth_single_user', $singleuser, TRUE);
+
+	#if the repo changes, remember to unset the is_public flag in the DB
+	if ($repo != get_option('wpghdash_gh_repo') ) {
+		save_repo_is_public($org, $repo);
+	}
 
 	#redirect back to page
 	$redirect_url = get_bloginfo('url') . "/wp-admin/options-general.php?page=wpghdash&status=success";
     header("Location: ".$redirect_url);
     exit;
 }
+
+function save_repo_is_public($user, $repo) {
+	$client = new \Github\Client();
+	
+	try {
+		$repo = $client->api('repo')->show($user, $repo);
+		$public = (!$repo['private']);
+		update_option('wpghdash_repo_is_public', $public );
+
+	} catch (Exception $e) {
+		//TODO: display this more gracefully
+		echo $e->getMessage();exit;
+	}
+
+
+}
+
 
 # Add css
 add_action( 'wp_enqueue_scripts', 'wpghdash_include_style' );
