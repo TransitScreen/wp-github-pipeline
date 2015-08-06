@@ -20,7 +20,7 @@ if (!defined('WPGHDASH_VERSION_NUM'))
     define('WPGHDASH_VERSION_NUM', '0.1.0');
 add_option(WPGHDASH_VERSION_KEY, WPGHDASH_VERSION_NUM);
 
-require_once 'vendor/autoload.php';
+require_once  __DIR__ . '/vendor/autoload.php';
 require_once 'helpers.php';
 require_once('shortcodes.php');
 require_once('github.php');
