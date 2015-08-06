@@ -1,9 +1,8 @@
-Pipeline is a Wordpress plugin which allows you to create a dashboard for you gitHub project. The intended use case for this tool is to provide an intuitive interface for non-technical members of the team. It is not intended to be a SCRUM board, or a full-featured project management tool. The name Pipeline refers to the fact that we make it easy to "pipe in" information from gitHub. Which information, and how you present it is up to you. 
-
-The goals was to be as versatile as possible while still being quick and easy to install and set up. 
+Pipeline is a Wordpress plugin which allows you to create a dashboard for you gitHub project. The intended use case for this tool is to provide an intuitive interface for non-technical members of the team. It is not intended to be a SCRUM board, or a full-featured project management tool. The name Pipeline refers to the fact that we make it easy to "pipe in" information from gitHub. Which information you pipe in, and how you present it is entirely up to you. 
 
 ### Requirements:
 * A gitHub repository
+* A registered 3rd party application for your repository (if private)
 * A working Wordpress installation (docs [here](https://codex.wordpress.org/Installing_WordPress))
 * PHP 5.5+
 
@@ -23,9 +22,6 @@ The goals was to be as versatile as possible while still being quick and easy to
 
 You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues will appear on the page until the user enters a search, then the page will display the results from the search.
 
-## Disclaimer
-The current implementation allows unencrypted GitHub passwords to be stored in the database when using the option to authenticate individual users to GitHub. This means that if your site is hacked and a malicious user gains access to your database, they can learn your GitHub password. The likelihood of this happening depends on the security of your environment. If this scares you, create a throw-away GitHub user and enter those credentials with the single-user configuration option.
-
 ## Tips
 * Wordpress offers many ways to manage access/privacy. But If you are setting up a tool for internal use by your team only, a plugin like [Private Only](https://wordpress.org/plugins/private-only/) may come in handy.
 
@@ -35,11 +31,9 @@ This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) 
 ## TODO:
 * Make CSS include optional
 * View issue comments
-* user-specific GH credentials
-* Don't store unencrypted GitHub passwords
+* Allow GitHub users to authenticate as themselves
 
 ## Backlog
-* Make CSS inclusion optional
 * Add admin option to hide gitHub credentials
 * Add ability to
 * Allow users to make comments

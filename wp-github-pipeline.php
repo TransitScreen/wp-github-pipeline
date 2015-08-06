@@ -1,4 +1,5 @@
 <?php
+
 /**
 Plugin Name: WP GitHub Pipeline
 Description: Create a custom wordpress dashboard...
@@ -11,6 +12,7 @@ Text Domain: wpgithubdash
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+
 # Track plugin version for future upgrades
 if (!defined('WPGHDASH_VERSION_KEY'))
     define('WPGHDASH_VERSION_KEY', 'wpghdash_version');
@@ -18,21 +20,25 @@ if (!defined('WPGHDASH_VERSION_NUM'))
     define('WPGHDASH_VERSION_NUM', '0.1.0');
 add_option(WPGHDASH_VERSION_KEY, WPGHDASH_VERSION_NUM);
 
+require_once 'vendor/autoload.php';
+require_once 'helpers.php';
+require_once('shortcodes.php');
+require_once('github.php');
 
 #register the menu
 add_action( 'admin_menu', 'wpghdash_plugin_menu' );
-
-#add it to the tools panel
 function wpghdash_plugin_menu() {
 	add_submenu_page( 'options-general.php', 'GitHub', 'GitHub', 'manage_options', 'wpghdash', 'wpghdash_plugin_options');
 }
-
-
 #print the markup for the page
 function wpghdash_plugin_options() {
 	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
+
+	handle_authentication_redirection();
+
+	$token = get_option('wpghdash_token');
 
 	echo '<div class="wrap">';
 
@@ -63,30 +69,21 @@ function wpghdash_plugin_options() {
 			<input class="" type="text" name="wpghdash_gh_repo" value="<?php echo get_option('wpghdash_gh_repo'); ?>" />
 			</p>
 
-			<a href="https://github.com/settings/applications/new">Register a new gitHub application...</a>
-			
-			<h3>GitHub Authorization Style</h3>
-			Many requests to the GitHub API require user authentication. There are two ways to do this. By default, each
-			Wordpress user must have a GitHub account and enter those credentials under the GitHub Credentials section. 
-			This is allows more control over permissions, but also means we need to store GitHub passwords in the database, 
-			which sucks from a security standpoint. If you enable <i>Single user</i> below you can create a throw-away GitHub 
-			user account and then only those credentials will be stored.
-			<p>
-				<input type="hidden" name="wpghdash_auth_single_user" value=0 />
-				<input type="checkbox" name="wpghdash_auth_single_user" value=1 <?php echo (get_option('wpghdash_auth_single_user')) ? "checked" : NULL; ?>/> Enable single user authentication</label>
-			</p>
+			<?php $client_id = get_option('wpghdash_client_id'); ?>
 
-
-			<?php if (get_option('wpghdash_auth_single_user')) : ?>
+			<?php if (get_option('wpghdash_auth_single_user') || TRUE) : ?>
 			<!-- fields for credentials -->
-			<h3>GitHub Single User Credentials</h3>
-			Enter the credentials for the gitHub user account that Pipeline will use to interact with GitHub.
+			<h3>GitHub Application Credentials</h3>
+
+			<p><a href="https://github.com/settings/applications/new">Register a new gitHub application...</a><br /><strong>IMPORTANT:</strong> Enter the homepage of your site in the field labeled: "Authorization callback URL".</p>
+
+			Enter the credentials provided by GitHub for your registered application.
 			<p>
-			<label>GitHub Single User Name:</label>
-			<input class="" type="text" name="wpghdash_client_id" value="<?php echo get_option('wpghdash_client_id'); ?>" />
+			<label>GitHub Application Client ID:</label>
+			<input class="" type="text" name="wpghdash_client_id" value="<?php echo $client_id; ?>" />
 			</p>
 			<p>
-			<label>GitHub Single User Password:</label>
+			<label>GitHub Application Client Secret:</label>
 			<input class="" type="password" name="wpghdash_client_secret" value="<?php echo get_option('wpghdash_client_secret'); ?>" />
 			</p>
 			<?php endif; ?>
@@ -94,12 +91,31 @@ function wpghdash_plugin_options() {
 			<input class="button button-primary" type="submit" value="Save" />
 		</form>
 
+	<?php if ( get_option('wpghdash_client_id') && get_option('wpghdash_client_secret') ) : ?>
+
+		<?php
+		$redirect_uri = admin_url('options-general.php?page=wpghdash');
+		$state = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+		update_option('wpghdash_auth_state', $state);
+		$auth_url = "https://github.com/login/oauth/authorize?state={$state}&client_id={$client_id}&scope=repo&redirect_uri={$redirect_uri}";
+		?>
+
+		<p>
+			<?php if (!$token) : ?>
+			<a class="button button-primary" href="<?php echo $auth_url; ?>">Authorize Pipeline to talk to GitHub</a>
+			<?php else : ?> 
+			<span>Pipeline is authorized! You're ready to go.</span>
+			<?php endif; ?>
+		</p>
 	<?php
+	endif;
+
 	echo '</div>';
 }
 
-#callback for handling the request
-function wpghdash_handle_request() {
+#register the action that the form submits to
+add_action( 'admin_post_update_wpghdash_settings', 'wpghdash_handle_save' );
+function wpghdash_handle_save() {
 
 	#check which options were sent
 	$client_id = (!empty($_POST['wpghdash_client_id'])) ? $_POST['wpghdash_client_id'] : NULL;
@@ -109,10 +125,10 @@ function wpghdash_handle_request() {
 	$singleuser = (!empty($_POST['wpghdash_auth_single_user'])) ? $_POST['wpghdash_auth_single_user'] : NULL;
 
 	#don't unset values when these aren't included in the form
-	if ($client_id || $client_secret){
+	// if ($client_id || $client_secret){
 		update_option( 'wpghdash_client_id', $client_id, TRUE );
 		update_option( 'wpghdash_client_secret', $client_secret, TRUE );
-	}
+	// }
 	
 	update_option( 'wpghdash_gh_repo', $repo, TRUE );
 	update_option('wpghdash_gh_org', $org, TRUE);
@@ -124,22 +140,12 @@ function wpghdash_handle_request() {
     exit;
 }
 
-#register the action that the form submits to
-add_action( 'admin_post_update_wpghdash_settings', 'wpghdash_handle_request' );
-
-#helpers
-function wpghdash_formatdate($data_str, $format=NULL) {
-	$format = ($format) ? $format : 'F j, Y';
-	return date_i18n( $format, strtotime($data_str) );
-}
-
 # Add css
+add_action( 'wp_enqueue_scripts', 'wpghdash_include_style' );
 function wpghdash_include_style(){
 	//TODO: Make this conditional, based on optional setting
 	wp_enqueue_style('wpghdash_styles', plugins_url('css/style.css', __FILE__)); 
 }
-add_action( 'wp_enqueue_scripts', 'wpghdash_include_style' );
-
 
 # Here we register scripts into the footer, but we DONT enque them yet. The shortcodes will do that.
 add_action( 'wp_enqueue_scripts', 'register_wpghdash_script' );
@@ -155,21 +161,63 @@ function wpghdash_wrap_ng_app($content) {
         return '<div class="pipeline-wrap" ng-app="pipeline">'.$content . '</div>';
 }
 
+/** 
+ * Check for whether code and/or state params are being passed back from GitHub after 
+ * user authorizes the regsitered app. If so, exchange for token and save.  
+ */
+function handle_authentication_redirection() {
+
+	#check if we're receiving the GitHub temporary code
+	$code = ( !empty($_GET['code']) ) ? $_GET['code'] : FALSE; 
+	$state = ( !empty($_GET['state']) ) ? $_GET['state'] : FALSE; 
+
+	if (!$code)
+		return;
+
+	$saved_state = get_option('wpghdash_auth_state');
+
+	if ($state != $saved_state)
+		return; //TODO: This should throw an error!
+
+	update_option('wpghdash_auth_code', $code);
+
+	//TODO: The php-githup-api library can probably do this easier
+	//TODO: This should handle non-success scenarios, like user NOT granting access
+	$guzzle = new \Guzzle\Http\Client('https://github.com');
+	$guzzle->setDefaultOption('headers', array('Accept' => 'application/json'));
+	$body = array
+	(
+		'client_id' => get_option('wpghdash_client_id'),
+		'client_secret' =>get_option('wpghdash_client_secret'),
+		'code' => $code,
+		'redirect_uri' => admin_url('options-general.php?page=wpghdash'),
+		'state' => $state
+	);
+	$request = $guzzle->post('https://github.com/login/oauth/access_token', null, $body );
+	$response = $request->send();
+
+	$data = $response->json();
+
+	if (!empty($data['access_token']))
+		update_option('wpghdash_token', $data['access_token']);
+
+}
 /**
 ADD THE GITHUB CREDENTIAL FIELDS TO USER PROFILE PAGE
 */
+/*
 add_action( 'show_user_profile', 'wpghdash_extra_user_profile_fields' );
 add_action( 'edit_user_profile', 'wpghdash_extra_user_profile_fields' );
 add_action( 'personal_options_update', 'wpghdash_save_extra_user_profile_fields' );
 add_action( 'edit_user_profile_update', 'wpghdash_save_extra_user_profile_fields' );
  
 function wpghdash_save_extra_user_profile_fields( $user_id )
- {
- if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
+{
+	if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
  	update_user_meta( $user_id, 'wpghdash_gh_username', $_POST['wpghdash_gh_username'] );
  	update_user_meta( $user_id, 'wpghdash_gh_pwd', $_POST['wpghdash_gh_pwd'] );
- }
-#Developed By wpghdash , http://wpghdash.com
+}
+
 function wpghdash_extra_user_profile_fields( $user )
 { ?>
 	<h3>GitHub Credentials</h3>
@@ -191,7 +239,4 @@ function wpghdash_extra_user_profile_fields( $user )
 	</tr>
 	</table>
 <?php }
-
-require_once 'vendor/autoload.php';
-require_once('shortcodes.php');
-require_once('github.php');
+*/

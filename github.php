@@ -1,6 +1,6 @@
 <?php
 
-// use Github\ResultsPager;
+/* Github class wraps the knplabs/github-api library */
 
 class Github {
 
@@ -17,42 +17,30 @@ class Github {
 	public $has_next_page = NULL;
 	public $has_prev_page = NULL;
 	public $per_page = NULL;
+	protected $token = NULL;
 
 	public function __construct() {
 
 		$this->repo = get_option('wpghdash_gh_repo');
+
 		$this->org = get_option('wpghdash_gh_org');
 
 		$this->single_user_mode = ( get_option('wpghdash_auth_single_user') ) ? TRUE : FALSE;
 
-		#set credentials
-		if ( $this->single_user_mode ) {
-			$this->gh_username = get_option('wpghdash_client_id');
-			$this->gh_password = get_option('wpghdash_client_secret');
-		} else {
-	    	
-	    	$current_user = wp_get_current_user();
-     		if ( !($current_user instanceof WP_User) ) #safety
-				return;
-
-			$this->gh_username = get_user_meta($current_user->ID, 'wpghdash_gh_username', TRUE);
-			$this->gh_password = get_user_meta($current_user->ID, 'wpghdash_gh_pwd', TRUE);
-		}
+		$this->token = get_option('wpghdash_token');
 
 		$this->check_for_settings();
 
 		$this->client = new \Github\Client();
 		
-		$auth = $this->client->authenticate( $this->gh_username, $this->gh_password, Github\Client::AUTH_HTTP_PASSWORD);
+		$auth = $this->client->authenticate( $this->token, NULL, Github\Client::AUTH_HTTP_TOKEN);
 		
-		//TODO: This should be dynamic
+		//TODO: This should be configurable
 		$this->per_page = 50;
 
 		#set up for paginated results
 		if ( !empty($_GET['gh_page'] ) )
 			$this->page = $_GET['gh_page'];
-
-
 
 	}
 
@@ -159,17 +147,15 @@ class Github {
 	public function check_for_settings($error=TRUE){
 		if (	$this->repo && 
 				$this->org && 
-				$this->gh_username && 
-				$this->gh_password
+				// $this->gh_username && 
+				// $this->gh_password
+				$this->token
 			)
 			$this->has_settings = TRUE;
 			
 			$msg = "<h2>Missing GitHub settings!</h2>";
-			if ($this->single_user_mode) {
-				$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a></p>";
-			} else {
-				$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a> and/or the GitHub credentials on <a href='".get_edit_user_link()."'>your profile page</a></p>";
-			}
+			$msg .= "<p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a></p>";
+
 			$this->missing_settings_msg = $msg;
 
 		return $this->has_settings;
