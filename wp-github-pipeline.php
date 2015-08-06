@@ -75,7 +75,11 @@ function wpghdash_plugin_options() {
 			<!-- fields for credentials -->
 			<h3>GitHub Application Credentials</h3>
 
-			<p><a href="https://github.com/settings/applications/new">Register a new gitHub application...</a><br /><strong>IMPORTANT:</strong> Enter the homepage of your site in the field labeled: "Authorization callback URL".</p>
+			<p>NOTE: If you're repository is public you can skip this step</p>
+
+			<p><a href="https://github.com/settings/applications/new">Register a new gitHub application...</a></p>
+
+			<p><strong>IMPORTANT:</strong> Enter the homepage of your site in the field labeled: "Authorization callback URL".</p>
 
 			Enter the credentials provided by GitHub for your registered application.
 			<p>
