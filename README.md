@@ -40,6 +40,7 @@ You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues
 This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) by KNP Labs
 
 ## TODO:
+* Unit tests
 * Make CSS include optional
 * View issue comments
 * Allow GitHub users to authenticate as themselves
