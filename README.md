@@ -6,12 +6,22 @@ Pipeline is a Wordpress plugin which allows you to create a dashboard for you gi
 * A working Wordpress installation (docs [here](https://codex.wordpress.org/Installing_WordPress))
 * PHP 5.5+
 
-##Quick Start
-1. Install and activate the plugin into a Wordpress site. If you download it from here you'll need to run `composer install` from inside the plugin.
-2. Register an application in the settings page for your GitHub repository.
-3. Add your gitHub repository info to the settings page under Settings > gitHub. You will need the Client ID and Client Secret from the previous step.
-4. When you see the button to "Authorize Github" click it.
+##Installation
+
+1. Install the plugin on a Wordpress site using any of the following methods.
+    
+    * Use the Wordpress plugin interface to upload the compiled plugin (locatedin the `dist/` directory).   
+    * [COMING SOON:] Use the Wordpress plugin interface to search for the plugin in the plugin library.
+    * Fork and/or Clone the repo from here and to run `composer install` to get the dependencies. This is ideal if you plan to contribute.
+
+## Quick Start
+1. Activate the plugin
+2. [Register an application](https://github.com/settings/applications/new) in the settings page for your GitHub repository.
+3. Add your gitHub repository info to the settings page under Settings > gitHub. You will need the Client ID and Client Secret from the application you registered in the previous step.
+4. After providing the required credentials you will see the button to "Authorize Github." Click it.
 5. Add shortcodes to pages to start presenting gitHub information
+
+Note: If the repository is public you only need to enter the repository settings. 
 
 ###Shortcodes
 
