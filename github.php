@@ -115,7 +115,9 @@ class Github {
 
 		$default_options = array(
 							'state'=>'all',
-							'page' => 1
+							'page' => 1,
+							'sort' => 'due_on',
+							'direction' => 'asc'
 							);
 
 		$params = array_merge($default_options, $options );
