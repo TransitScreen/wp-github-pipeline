@@ -4,7 +4,10 @@ machine:
   timezone:
     America/New_York # Set the timezone
 
-  # Version of ruby to use
   php:
     version:
-      5.6.11
+      5.6.5
+
+## Customize test commands
+test:
+  override:
