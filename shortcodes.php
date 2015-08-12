@@ -4,7 +4,9 @@
 
 function milestones_func( $atts ) {
 	$atts = shortcode_atts( array(
-		'state' => 'all'
+		'state' => 'all',
+		'direction' => 'asc',
+		'sort' =>'due_on'
 	), $atts, 'gh_milestones' );
 	
 	$gh = new Github();

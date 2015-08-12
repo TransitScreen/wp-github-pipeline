@@ -168,3 +168,9 @@ function wpghdash_formatdate($data_str, $format=NULL) {
 	$format = ($format) ? $format : 'F j, Y';
 	return date_i18n( $format, strtotime($data_str) );
 }
+
+function dump($var) {
+	echo "<pre>";
+	var_dump($var);
+	echo "</pre>";
+}

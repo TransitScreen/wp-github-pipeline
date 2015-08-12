@@ -27,7 +27,7 @@ Note: If the repository is public you only need to enter the repository settings
 
 `[gh_issues labels="foo,bar,NULL" state="ALL|open|closed" show_body="FALSE|true|toggle" ]`
 
-`[gh_milestones state="open|closed|all"]`
+`[gh_milestones state="open|closed|all"] sort="DUE_ON|completeness" direction="ASC|desc"`
 
 `[gh_searchform labels="foo,bar" state="ALL|open|closed"]`
 
