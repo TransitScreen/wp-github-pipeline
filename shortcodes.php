@@ -1,5 +1,4 @@
 <?php
-
 /* REGISTER SHORTCODES AND CALLBACKS */
 
 function milestones_func( $atts ) {
