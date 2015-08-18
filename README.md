@@ -14,12 +14,11 @@ Install the plugin on a Wordpress site using any of the following methods.
 
 ## Quick Start
 1. Activate the plugin
-2. [Register an application](https://github.com/settings/applications/new) in the settings page for your GitHub repository.
-3. Add your gitHub repository info to the settings page under Settings > gitHub. You will need the Client ID and Client Secret from the application you registered in the previous step.
-4. After providing the required credentials you will see the button to "Authorize Github." Click it.
-5. Add shortcodes to pages to start presenting gitHub information
-
-Note: If the repository is public you only need to enter the repository settings. 
+2. Add your GitHub repository information to the plugin settings page under Settings > gitHub. 
+3. If the GitHub repository is private,
+  a. In the repository settings page, [Register an application](https://github.com/settings/applications/new)
+  b. Copy the Client ID and Client Secret into the plugin settings page. Click the button to "Authorize Github."
+4. Add shortcodes to pages to start presenting gitHub information
 
 ### Shortcodes
 
