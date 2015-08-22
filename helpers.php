@@ -29,11 +29,11 @@ function format_issues( $issues, $body=false ) {
 		
 		if ($body===strtolower('toggle')) {
 			$return .= '<div class="issue__toggle-wrap">';
-			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
+			$return .= '<div class="issue__body">'.convert_markdown($issue['body'], true).'</div>';
 			$return .= '<a href="#" form-toggle-btn>&darr; More</a>';
 			$return .= '</div>';
 		} else if ($body){
-			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
+			$return .= '<div class="issue__body">'.convert_markdown($issue['body'], true).'</div>';
 		}
 	}
 
@@ -43,8 +43,10 @@ function format_issues( $issues, $body=false ) {
 }
 
 use League\CommonMark\CommonMarkConverter;
-function convert_markdown($string){
+function convert_markdown($string, $linebreaks=null){
 	$newstring = $string;
+	if ($linebreaks)
+		$newstring = nl2br($newstring);
 	$converter = new CommonMarkConverter();
 	$newstring =  $converter->convertToHtml( $newstring );
 	return $newstring;
