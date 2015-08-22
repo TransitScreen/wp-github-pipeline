@@ -22,7 +22,7 @@ function format_issues( $issues, $body=false ) {
 
 		$return .= '<ul class="issue__details">';
 		$return .= '<li>State: '.$issue['state'].'</li>';
-		$return .= (!empty($issue['closed_at'])) ? '<li>Closed: '.wpghdash_formatdate($issue['closed_at']).'</li>' : NULL;
+		$return .= (!empty($issue['closed_at'])) ? '<li>Closed: '.wpghpl_formatdate($issue['closed_at']).'</li>' : NULL;
 		$return .= (!empty($issue['assignee'])) ? '<li>Assigned to: '.$issue['assignee']['login'].'</li>' : NULL;
 		$return .= (!empty($issue['milestone'])) ? '<li><span class="issue__details__milestone '.( ($issue['milestone']['closed_at']) ? 'issue__details__milestone--closed' : NULL ).'">Milestone: '.$issue['milestone']['title'].( ($issue['milestone']['description'])? ": ".$issue['milestone']['description']: NULL ).'</span></li>' : NULL;
 		$return .= '</ul>';
@@ -84,7 +84,7 @@ function format_milestones( $milestones ) {
 		$return .= '<ul class="milestone__details">
 		';
 		// $return .= '<li>State: '.$milestone['state'].'</li>';
-		$return .= ($milestone['due_on']) ? '<li>Due: '.wpghdash_formatdate($milestone['due_on']).'</li>' : NULL;
+		$return .= ($milestone['due_on']) ? '<li>Due: '.wpghpl_formatdate($milestone['due_on']).'</li>' : NULL;
 		$return .= '<li>Open issues: '.$milestone['open_issues'].' Closed issues: '.$milestone['closed_issues'].'</li>';
 
 		$return .= '<li>Issues:<br/>'. print_milestone_issues($milestone['issues']) .'</li>';
@@ -164,7 +164,7 @@ function append_page_links($string, $Client) {
 	return $newstring;
 }
 
-function wpghdash_formatdate($data_str, $format=NULL) {
+function wpghpl_formatdate($data_str, $format=NULL) {
 	$format = ($format) ? $format : 'F j, Y';
 	return date_i18n( $format, strtotime($data_str) );
 }

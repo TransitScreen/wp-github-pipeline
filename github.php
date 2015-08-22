@@ -18,22 +18,23 @@ class Github {
 	public $has_prev_page = NULL;
 	public $per_page = NULL;
 	protected $token = NULL;
+	public $prefix = 'wpghpl_';
 
 	public function __construct() {
 
-		$this->repo = get_option('wpghdash_gh_repo');
+		$this->repo = get_option($this->prefix . 'gh_repo');
 
-		$this->org = get_option('wpghdash_gh_org');
+		$this->org = get_option($this->prefix . 'gh_org');
 
-		$this->single_user_mode = ( get_option('wpghdash_auth_single_user') ) ? TRUE : FALSE;
+		$this->single_user_mode = ( get_option($this->prefix . 'auth_single_user') ) ? TRUE : FALSE;
 
-		$this->token = get_option('wpghdash_token');
+		$this->token = get_option($this->prefix . 'token');
 
 		$this->client = new \Github\Client();
 
 		$this->check_for_settings();
 
-		$this->missing_settings_msg = "<h2>Missing GitHub settings!</h2><p>Update the <a href='".admin_url('options-general.php?page=wpghdash')."'>settings page</a></p>";
+		$this->missing_settings_msg = "<h2>Missing GitHub settings!</h2><p>Update the <a href='".admin_url('options-general.php?page='.( substr($this->prefix, 0, -1) ) )."'>settings page</a></p>";
 		
 		if ($this->token)
 			$auth = $this->client->authenticate( $this->token, NULL, Github\Client::AUTH_HTTP_TOKEN);
@@ -169,20 +170,12 @@ class Github {
 		} elseif (
 				$this->repo &&
 				$this->org &&
-				get_option('wpghdash_repo_is_public')
+				get_option($this->prefix . 'repo_is_public')
 			) {
 
 			$this->has_settings = TRUE;
 
 		} 
-		// 	elseif (
-		// 		$this->repo && 
-		// 		$this->org && 
-		// 		$this->repo_is_public( $this->org, $this->repo )
-		// 	) {
-
-		// 	$this->has_settings = TRUE;
-		// }
 
 		return $this->has_settings;
 	}
