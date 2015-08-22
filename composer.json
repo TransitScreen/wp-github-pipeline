@@ -1,7 +1,8 @@
 {
     "require": {
         "knplabs/github-api": "dev-master",
-        "guzzle/guzzle": "3.9"
+        "guzzle/guzzle": "3.9",
+        "league/commonmark": "*"
     },
     "require-dev": {
     	"wp-cli/wp-cli": "*",
