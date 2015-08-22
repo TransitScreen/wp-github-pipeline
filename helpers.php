@@ -28,8 +28,10 @@ function format_issues( $issues, $body=false ) {
 		$return .= '</ul>';
 		
 		if ($body===strtolower('toggle')) {
-			$return .= '<a href="#" form-toggle-btn>Show text</a>';
+			$return .= '<div class="issue__toggle-wrap">';
 			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
+			$return .= '<a href="#" form-toggle-btn>Show text</a>';
+			$return .= '</div>';
 		} else if ($body){
 			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
 		}

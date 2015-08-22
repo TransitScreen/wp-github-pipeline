@@ -17,7 +17,12 @@ pipeline.directive('formToggleBtn', [function() {
             targets = findTargets( searchWithin, scope.mytarget );
         
         } else { //No target attribute. Default to sister
-            targets = element[0].nextSibling;
+            if (element[0].nextSibling) {
+                targets = element[0].nextSibling;
+            } else {
+                targets = element[0].previousSibling;
+            }
+            console.log(targets);
         }
         
         /* 
