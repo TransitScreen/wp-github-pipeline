@@ -1,12 +1,12 @@
-Pipeline is a Wordpress plugin which allows you to create a dashboard for you gitHub project. The intended use case for this tool is to provide an intuitive interface for non-technical members of the team. It is not intended to be a SCRUM board, or a full-featured project management tool. The name Pipeline refers to the fact that we make it easy to "pipe in" information from gitHub. Which information you pipe in, and how you present it is entirely up to you. 
+<img src="https://circleci.com/gh/TransitScreen/wp-github-pipeline.svg?style=shield&circle-token=:circle-token" />
+
+Pipeline is a Wordpress plugin which allows you to create a dashboard for your gitHub project. The intended use case for this tool is to provide an intuitive interface for non-technical members of the team. It is not intended to be a SCRUM board, or a full-featured project management tool. The name Pipeline refers to the fact that we make it easy to "pipe in" information from gitHub. Which information you pipe in, and how you present it, is entirely up to you. 
 
 ### Requirements:
-* A gitHub repository
-* A registered 3rd party application for your repository (if private)
-* A working Wordpress installation (docs [here](https://codex.wordpress.org/Installing_WordPress))
-* PHP 5.5+
+* A GitHub repository (private or public) 
+* A working Wordpress installation (docs [here](https://codex.wordpress.org/Installing_WordPress)) using PHP 5.5+
 
-##Installation
+## Installation
 
 Install the plugin on a Wordpress site using any of the following methods.
     
@@ -16,14 +16,13 @@ Install the plugin on a Wordpress site using any of the following methods.
 
 ## Quick Start
 1. Activate the plugin
-2. [Register an application](https://github.com/settings/applications/new) in the settings page for your GitHub repository.
-3. Add your gitHub repository info to the settings page under Settings > gitHub. You will need the Client ID and Client Secret from the application you registered in the previous step.
-4. After providing the required credentials you will see the button to "Authorize Github." Click it.
-5. Add shortcodes to pages to start presenting gitHub information
+2. Add your GitHub repository information to the plugin settings page under Settings > gitHub. 
+3. If the GitHub repository is private,
+  1. In the repository settings page, [Register an application](https://github.com/settings/applications/new)
+  2. Copy the Client ID and Client Secret into the plugin settings page. Click the button to "Authorize Github."
+4. Add shortcodes to pages to start presenting gitHub information
 
-Note: If the repository is public you only need to enter the repository settings. 
-
-###Shortcodes
+### Shortcodes
 
 `[gh_issues labels="foo,bar,NULL" state="ALL|open|closed" show_body="FALSE|true|toggle" ]`
 
@@ -47,5 +46,4 @@ This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) 
 
 ## Backlog
 * Add admin option to hide gitHub credentials
-* Add ability to
 * Allow users to make comments
