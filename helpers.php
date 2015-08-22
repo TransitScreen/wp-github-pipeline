@@ -30,7 +30,7 @@ function format_issues( $issues, $body=false ) {
 		if ($body===strtolower('toggle')) {
 			$return .= '<div class="issue__toggle-wrap">';
 			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
-			$return .= '<a href="#" form-toggle-btn>Show text</a>';
+			$return .= '<a href="#" form-toggle-btn>&darr; More</a>';
 			$return .= '</div>';
 		} else if ($body){
 			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
