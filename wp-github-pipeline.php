@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 if (!defined('WPGHDASH_VERSION_KEY'))
     define('WPGHDASH_VERSION_KEY', 'wpghpl_version');
 if (!defined('WPGHDASH_VERSION_NUM'))
-    define('WPGHDASH_VERSION_NUM', '0.1.0');
+    define('WPGHDASH_VERSION_NUM', '1.0');
 add_option(WPGHDASH_VERSION_KEY, WPGHDASH_VERSION_NUM);
 
 require_once 'vendor/autoload.php';
@@ -129,15 +129,15 @@ function wpghpl_handle_save() {
 	$org = (!empty($_POST['wpghpl_gh_org'])) ? $_POST['wpghpl_gh_org'] : NULL;
 	$singleuser = (!empty($_POST['wpghpl_auth_single_user'])) ? $_POST['wpghpl_auth_single_user'] : NULL;
 
-	update_option( 'wpghpl_client_id', $client_id, TRUE );
-	update_option( 'wpghpl_client_secret', $client_secret, TRUE );
-	update_option( 'wpghpl_gh_repo', $repo, TRUE );
-	update_option('wpghpl_gh_org', $org, TRUE);
-
 	#if the repo changes, remember to unset the is_public flag in the DB
 	if ($repo != get_option('wpghpl_gh_repo') ) {
 		save_repo_is_public($org, $repo);
 	}
+
+	update_option( 'wpghpl_client_id', $client_id, TRUE );
+	update_option( 'wpghpl_client_secret', $client_secret, TRUE );
+	update_option( 'wpghpl_gh_repo', $repo, TRUE );
+	update_option('wpghpl_gh_org', $org, TRUE);
 
 	#redirect back to page
 	$redirect_url = get_bloginfo('url') . "/wp-admin/options-general.php?page=wpghpl&status=success";
@@ -146,18 +146,17 @@ function wpghpl_handle_save() {
 }
 
 function save_repo_is_public($user, $repo) {
+
 	$client = new \Github\Client();
 	
+	#github throws a 404 error if the repo is private
 	try {
 		$repo = $client->api('repo')->show($user, $repo);
 		$public = (!$repo['private']);
 		update_option('wpghpl_repo_is_public', $public );
-
 	} catch (Exception $e) {
-		//TODO: display this more gracefully
-		echo $e->getMessage();exit;
+		update_option('wpghpl_repo_is_public', 0 );
 	}
-
 
 }
 

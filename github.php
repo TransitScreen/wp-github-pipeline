@@ -156,6 +156,9 @@ class Github {
 	 * @return bool
 	 */
 	public function check_for_settings($error=TRUE){
+		// dump( get_option($this->prefix . 'repo_is_public') );
+		// dump( $this->repo );
+		// dump( $this->org );
 
 		if (	
 				$this->repo && 
