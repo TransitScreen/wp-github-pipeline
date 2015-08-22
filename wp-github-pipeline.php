@@ -2,12 +2,13 @@
 
 /**
 Plugin Name: WP GitHub Pipeline
-Description: Create a custom wordpress dashboard...
-Version: 0.1.0
-Author: Team TransitScreen
+Plugin URI: https://github.com/TransitScreen/wp-github-pipeline
+Description: Creates a custom dashboard for your GitHub projects
+Version: 1.0
+Author: TransitScreen
 Author URI: http://transitscreen.com/
 License: GPLv2 or later
-Text Domain: wpgithubdash
+Text Domain: wpghpl
 */
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
