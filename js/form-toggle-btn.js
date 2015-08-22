@@ -3,6 +3,8 @@ pipeline.directive('formToggleBtn', [function() {
     function link(scope, element, attr){
 
         var targets, climbnodes, searchWithin;
+        var openText = ( scope.opentext ) ? scope.opentext : "&uarr; Less";
+        var closedText = ( scope.closedtext ) ? scope.closedtext : "&darr; More";
 
         if (scope.mytarget) { //Target specified
             if (scope.climbnodes) { //how many nodes to climb up before searching down?
@@ -17,12 +19,11 @@ pipeline.directive('formToggleBtn', [function() {
             targets = findTargets( searchWithin, scope.mytarget );
         
         } else { //No target attribute. Default to sister
-            if (element[0].nextSibling) {
+            if (element[0].nextSibling) { //if no nextSibling, try previous
                 targets = element[0].nextSibling;
             } else {
                 targets = element[0].previousSibling;
             }
-            console.log(targets);
         }
         
         /* 
@@ -43,6 +44,9 @@ pipeline.directive('formToggleBtn', [function() {
             //regularize singletons as array so we can always loop...
             targets = ( targets.constructor === Array ) ? targets : [ targets ];
 
+            element[0].innerHTML = (scope.open) ? openText : closedText ;
+            scope.open = !scope.open;
+
             for (var i=0; i<targets.length; i++) {
                 subTargets = targets[i];
                 subTargets = ( subTargets.constructor === Array ) ? subTargets : [ subTargets ];
@@ -57,6 +61,7 @@ pipeline.directive('formToggleBtn', [function() {
         element.on('click', function(event){ toggleOpen(event);event.preventDefault(); } );
 
         //start closed
+        scope.open = false;
         toggleOpen();
 
     }
@@ -67,7 +72,9 @@ pipeline.directive('formToggleBtn', [function() {
         link: link,
         scope: {
           mytarget: "@",
-          climbnodes: "="
+          climbnodes: "=",
+          opentext: "@",
+          closedtext: "@"
         }
     };
 }]);
