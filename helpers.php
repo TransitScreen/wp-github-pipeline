@@ -29,9 +29,9 @@ function format_issues( $issues, $body=false ) {
 		
 		if ($body===strtolower('toggle')) {
 			$return .= '<a href="#" form-toggle-btn>Show text</a>';
-			$return .= '<div class="issue__body">'.convert_text_to_markup($issue['body']).'</div>';
+			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
 		} else if ($body){
-			$return .= '<div class="issue__body">'.convert_text_to_markup($issue['body']).'</div>';
+			$return .= '<div class="issue__body">'.convert_markdown($issue['body']).'</div>';
 		}
 	}
 
@@ -40,10 +40,11 @@ function format_issues( $issues, $body=false ) {
 	return $return;
 }
 
-function convert_text_to_markup($string){
+use League\CommonMark\CommonMarkConverter;
+function convert_markdown($string){
 	$newstring = $string;
-	$newstring = htmlentities($newstring);
-	$newstring = nl2br($newstring);
+	$converter = new CommonMarkConverter();
+	$newstring =  $converter->convertToHtml( $newstring );
 	return $newstring;
 }
 
