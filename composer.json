@@ -3,6 +3,10 @@
         "knplabs/github-api": "dev-master",
         "guzzle/guzzle": "3.9"
     },
+    "require-dev": {
+    	"wp-cli/wp-cli": "*",
+    	"phpunit/phpunit": "*"
+    },
     "autoload": {
     	"psr-0": {
     		"guzzle": "src/"
