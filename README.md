@@ -1,3 +1,5 @@
+<img src="https://circleci.com/gh/TransitScreen/wp-github-pipeline.svg?style=shield&circle-token=:circle-token" />
+
 Pipeline is a Wordpress plugin which allows you to create a dashboard for your gitHub project. The intended use case for this tool is to provide an intuitive interface for non-technical members of the team. It is not intended to be a SCRUM board, or a full-featured project management tool. The name Pipeline refers to the fact that we make it easy to "pipe in" information from gitHub. Which information you pipe in, and how you present it, is entirely up to you. 
 
 ### Requirements:
@@ -44,5 +46,4 @@ This tool wraps the [PHP GitHub API](https://github.com/KnpLabs/php-github-api) 
 
 ## Backlog
 * Add admin option to hide gitHub credentials
-* Add ability to
 * Allow users to make comments
