@@ -16,31 +16,42 @@ function format_issues( $issues, $body=false ) {
 
 	foreach ($issues as $issue) {
 
-		$return .= '<h3 class="issue__title">'. htmlentities( $issue['title'] ).' #'. $issue['number'].'</h3>';
-
-		$return .= build_labels( $issue['labels'] );
-
-		$return .= '<ul class="issue__details">';
-		$return .= '<li>State: '.$issue['state'].'</li>';
-		$return .= (!empty($issue['closed_at'])) ? '<li>Closed: '.wpghpl_formatdate($issue['closed_at']).'</li>' : NULL;
-		$return .= (!empty($issue['assignee'])) ? '<li>Assigned to: '.$issue['assignee']['login'].'</li>' : NULL;
-		$return .= (!empty($issue['milestone'])) ? '<li><span class="issue__details__milestone '.( ($issue['milestone']['closed_at']) ? 'issue__details__milestone--closed' : NULL ).'">Milestone: '.$issue['milestone']['title'].( ($issue['milestone']['description'])? ": ".$issue['milestone']['description']: NULL ).'</span></li>' : NULL;
-		$return .= '</ul>';
-		
-		if ($body===strtolower('toggle')) {
-			$return .= '<div class="issue__toggle-wrap">';
-			$return .= '<div class="issue__body">'.convert_markdown($issue['body'], true).'</div>';
-			$return .= '<a href="#" form-toggle-btn>&darr; More</a>';
-			$return .= '</div>';
-		} else if ($body){
-			$return .= '<div class="issue__body">'.convert_markdown($issue['body'], true).'</div>';
-		}
+		$return .= format_issue($issue, $body);
 	}
 
 	$return .= '</div>';
 
 	return $return;
 }
+
+function format_issue($issue, $body) {
+
+	$return = '';
+
+	$return .= '<h3 class="issue__title">'. htmlentities( $issue['title'] ).' #'. $issue['number'].'</h3>';
+
+	$return .= build_labels( $issue['labels'] );
+
+	$return .= '<ul class="issue__details">';
+	$return .= '<li>State: '.$issue['state'].'</li>';
+	$return .= (!empty($issue['closed_at'])) ? '<li>Closed: '.wpghpl_formatdate($issue['closed_at']).'</li>' : NULL;
+	$return .= (!empty($issue['assignee'])) ? '<li>Assigned to: '.$issue['assignee']['login'].'</li>' : NULL;
+	$return .= (!empty($issue['milestone'])) ? '<li><span class="issue__details__milestone '.( ($issue['milestone']['closed_at']) ? 'issue__details__milestone--closed' : NULL ).'">Milestone: '.$issue['milestone']['title'].( ($issue['milestone']['description'])? ": ".$issue['milestone']['description']: NULL ).'</span></li>' : NULL;
+	$return .= '</ul>';
+	
+	if ($body===strtolower('toggle') && !empty($issue['body']) ) {
+		$return .= '<div class="issue__toggle-wrap">';
+		$return .= '<div class="issue__body">'.convert_markdown($issue['body'], true).'</div>';
+		$return .= '<a href="#" form-toggle-btn>&darr; More</a>';
+		$return .= '</div>';
+	} else if ($body){
+		$return .= '<div class="issue__body">'.convert_markdown($issue['body'], true).'</div>';
+	}
+
+	return $return;
+
+}
+
 
 use League\CommonMark\CommonMarkConverter;
 function convert_markdown($string, $linebreaks=null){
