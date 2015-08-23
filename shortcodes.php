@@ -2,11 +2,6 @@
 /* REGISTER SHORTCODES AND CALLBACKS */
 
 function milestones_func( $atts ) {
-	$atts = shortcode_atts( array(
-		'state' => 'all',
-		'direction' => 'asc',
-		'sort' =>'due_on'
-	), $atts, 'gh_milestones' );
 	
 	$gh = new Github();
 	if (!$gh->has_settings)
@@ -25,13 +20,6 @@ function issues_func( $atts ) {
 	if ( !empty($_GET['gh_searchterm']) )
 		return;
 
-	$atts = shortcode_atts( array(
-		'labels' => NULL,
-		'state' => NULL,
-		'per_page' => 50, #max is 100
-		'show_body' => FALSE
-	), $atts, 'gh_issues' );
-
 	$gh = new Github();
 	if (!$gh->has_settings)
 		return $gh->missing_settings_msg;
@@ -49,14 +37,6 @@ add_shortcode( 'gh_issues', 'issues_func' );
 
 
 function searchform_func( $atts ) {
-	$atts = shortcode_atts( array(
-		'placeholder' => NULL,
-		'type' => NULL,
-		'in' => NULL,
-		'labels'=>NULL,
-		'state'=>NULL,
-		'show_body'=>FALSE
-	), $atts, 'gh_searchform' );
 	
 	$gh = new Github();
 	if (!$gh->has_settings)
