@@ -20,5 +20,33 @@ class HelpersTest extends WP_UnitTestCase {
 
 	}
 
+	function test_build_labels() {
+
+		# This should be fixtures
+		$labels = array(
+			array(
+				"url" => "https://api.github.com/repos/jquery/jquery/labels/CLA:%20Valid",
+				"name" => "CLA: Valid",
+				"color"=> "007700"
+			),
+			array(
+			 	"url" => "https://api.github.com/repos/jquery/jquery/labels/Blocker",
+				"name" => "Blocker",
+			  	"color" => "f7c6c7"
+			)
+		);
+
+		#dark label
+		$label1 = build_label($labels[0]);
+		$this->assertContains( 'background-color:#007700', $label1);
+		$this->assertContains( 'color:#FFF', $label1);
+
+		#light label
+		$label2 = build_label($labels[1]);
+		$this->assertContains( 'background-color:#f7c6c7', $label2);
+		$this->assertNotContains( 'color:#FFF', $label2);
+
+	}
+
 
 }
