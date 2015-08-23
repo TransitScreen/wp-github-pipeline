@@ -55,15 +55,24 @@ function convert_markdown($string, $linebreaks=null){
 function build_labels( $labels ) {
 	$return = '';
 	foreach ($labels as $label) {
-		$return .= '<span class="issue__label" ';
-		$return .= 'style="background-color:#'. $label['color'] . ';';
-		$return .= ( needs_white_text($label['color']) ) ? ' color:#FFF;' : NULL;
-		$return .= '" '; #closing the style attribute
-		$return .= '>'; 
-		$return .= $label['name'];
-		$return .= '</span>';
+		$return .= build_label($label);
 	}
 	return $return;
+}
+
+function build_label( $label ) {
+
+	$return = '';
+	$return .= '<span class="issue__label" ';
+	$return .= 'style="background-color:#'. $label['color'] . ';';
+	$return .= ( needs_white_text($label['color']) ) ? ' color:#FFF;' : NULL;
+	$return .= '" '; #closing the style attribute
+	$return .= '>'; 
+	$return .= $label['name'];
+	$return .= '</span>';
+
+	return $return;
+
 }
 
 /**
