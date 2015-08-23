@@ -52,8 +52,10 @@ class Github {
 
 		$default_options = array(
 							'labels'=>'', 
-							'state'=>'all',
-							'page' => $this->page
+							'state'=>'open',
+							'page' => $this->page,
+							'per_page' => NULL,
+							'show_body' => FALSE
 							);
 
 		$params = array_merge($default_options, $options);
@@ -61,7 +63,11 @@ class Github {
 		$paginator = new Github\ResultPager($this->client);
 
 		try {
-			$issues = $paginator->fetch($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
+			if ( !empty($params['per_page']) ) {
+				$issues = $paginator->fetch($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
+			} else {
+				$issues = $paginator->fetchAll($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
+			}
 		} catch (Exception $e) {
 			echo "Error! " . $e->getMessage();
 			return;
@@ -75,12 +81,22 @@ class Github {
 
 	public function search_issues($options=array()) {
 
+	// $atts = shortcode_atts( array(
+	// 	'placeholder' => NULL,
+	// 	'type' => NULL,
+	// 	'in' => NULL,
+	// 	'labels'=>NULL,
+	// 	'state'=>NULL,
+	// 	'show_body'=>FALSE
+	// ), $atts, 'gh_searchform' );
+
 		$default_options = array(
 							'type' => NULL, # issue | pr
 							'in' => NULL, # which fields are searched: title|body|comment (or combo)
 							'labels'=>NULL,
 							'term' => NULL, 
 							'state'=>'all',
+							'show_body' => FALSE
 							// 'page' => $this->page
 							);
 		
@@ -115,7 +131,8 @@ class Github {
 	public function get_milestones($options=array()) {
 
 		$default_options = array(
-							'state'=>'all',
+							'state'=>'open',
+							'direction' => 'asc',
 							'page' => 1,
 							'sort' => 'due_on',
 							'direction' => 'asc'
