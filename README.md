@@ -24,13 +24,17 @@ Install the plugin on a Wordpress site using any of the following methods.
 
 ### Shortcodes
 
-`[gh_issues labels="foo,bar,NULL" state="ALL|open|closed" show_body="FALSE|true|toggle" ]`
+`[gh_issues labels="foo,bar" state="all|OPEN|closed" per_page="NULL|#" show_body="FALSE|true|toggle" ]`
 
-`[gh_milestones state="open|closed|all"] sort="DUE_ON|completeness" direction="ASC|desc"`
+`[gh_milestones state="OPEN|closed|all"] sort="DUE_ON|completeness" direction="ASC|desc"`
 
 `[gh_searchform labels="foo,bar" state="ALL|open|closed"]`
 
 You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues will appear on the page until the user enters a search, then the page will display the results from the search.
+
+### Pagination
+
+By default, issues will not be paginated and all results will appear on a single screen. This can be cumbersome if there are a lot of screens. The optional `per_page=n` attribute will cause the results to be paginated into groups of `n` issues. The maximum size pages length is 50 (this is a quirk of the GitHub API).
 
 ## Tips
 * Wordpress offers many ways to manage access/privacy. But If you are setting up a tool for internal use by your team only, a plugin like [Private Only](https://wordpress.org/plugins/private-only/) may come in handy.
