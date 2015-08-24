@@ -1,5 +1,5 @@
 <?php
-
+namespace WPGHPL;
 /* HELPERS FOR PRESENTING MARKUP */
 
 function format_issues( $issues, $body=false ) {
