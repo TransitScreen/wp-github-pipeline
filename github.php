@@ -2,7 +2,7 @@
 
 /* Github class wraps the knplabs/github-api library */
 
-class Github {
+class WPGHPL_Github {
 
 	protected $client;
 	protected $org;

@@ -1,22 +1,22 @@
 <?php
 
-class HelpersTest extends WP_UnitTestCase {
+class WPGHPL_HelpersTest extends WP_UnitTestCase {
 
 
 	function test_convert_markdown() {
 
 		# converts markdown
-		$this->assertStringMatchesFormat( '<p><code>foo</code></p>', convert_markdown('```foo```') );
-		$this->assertStringMatchesFormat( '<h1>%s</h1>', convert_markdown('# Some title') );
+		$this->assertStringMatchesFormat( '<p><code>foo</code></p>', WPGHPL\convert_markdown('```foo```') );
+		$this->assertStringMatchesFormat( '<h1>%s</h1>', WPGHPL\convert_markdown('# Some title') );
 
 	}
 
 	function test_needs_white_text() {
 
-		$this->assertTrue( needs_white_text('#000000') ); # black, duh
-		$this->assertTrue( needs_white_text('#007700') ); # dark green
-		$this->assertFalse( needs_white_text('#FFFFFF') ); # white
-		$this->assertFalse( needs_white_text('#fbca04') ); # orangy yellow
+		$this->assertTrue( WPGHPL\needs_white_text('#000000') ); # black, duh
+		$this->assertTrue( WPGHPL\needs_white_text('#007700') ); # dark green
+		$this->assertFalse( WPGHPL\needs_white_text('#FFFFFF') ); # white
+		$this->assertFalse( WPGHPL\needs_white_text('#fbca04') ); # orangy yellow
 
 	}
 
@@ -37,12 +37,12 @@ class HelpersTest extends WP_UnitTestCase {
 		);
 
 		#dark label
-		$label1 = build_label($labels[0]);
+		$label1 = WPGHPL\build_label($labels[0]);
 		$this->assertContains( 'background-color:#007700', $label1);
 		$this->assertContains( 'color:#FFF', $label1);
 
 		#light label
-		$label2 = build_label($labels[1]);
+		$label2 = WPGHPL\build_label($labels[1]);
 		$this->assertContains( 'background-color:#f7c6c7', $label2);
 		$this->assertNotContains( 'color:#FFF', $label2);
 
@@ -99,13 +99,13 @@ class HelpersTest extends WP_UnitTestCase {
 			  'body' => '',
 		);
 
-		$issue1build = format_issue($issue1, 'toggle');
+		$issue1build = WPGHPL\format_issue($issue1, 'toggle');
 		# no toggle if there's no body
 		$this->assertNotContains('toggle', $issue1build);
 
 		$issue2 = $issue1;
 		$issue2['body'] = 'xyz';
-		$issue2build = format_issue($issue2, 'toggle');
+		$issue2build = WPGHPL\format_issue($issue2, 'toggle');
 		$this->assertContains('toggle', $issue2build);
 
 	}
