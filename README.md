@@ -9,8 +9,7 @@ Pipeline is a Wordpress plugin which allows you to create a customizable dashboa
 ## Installation
 
 Install the plugin on a Wordpress site using any of the following methods.
-    
-* Use the Wordpress plugin interface to upload the compiled plugin (locatedin the `dist/` directory).   
+
 * [COMING SOON:] Use the Wordpress plugin interface to search for the plugin in the plugin library.
 * Fork and/or Clone the repo from here and to run `composer install` to get the dependencies. This is ideal if you plan to contribute.
 
