@@ -1,51 +1,52 @@
 <?php
+
 /* REGISTER SHORTCODES AND CALLBACKS */
 
-function milestones_func( $atts ) {
+function wpghpl_milestones_func( $atts ) {
 	
-	$gh = new Github();
+	$gh = new WPGHPL_Github();
 	if (!$gh->has_settings)
 		return $gh->missing_settings_msg;
 
 	$milestones = $gh->get_milestones($atts);
 
-	return format_milestones( $milestones ); 
+	return WPGHPL\format_milestones( $milestones ); 
 }
-add_shortcode( 'gh_milestones', 'milestones_func' );
+add_shortcode( 'gh_milestones', 'wpghpl_milestones_func' );
 
 
-function issues_func( $atts ) {
+function wpghpl_issues_func( $atts ) {
 
 	#if a search term was entered do nothing.
 	if ( !empty($_GET['gh_searchterm']) )
 		return;
 
-	$gh = new Github();
+	$gh = new WPGHPL_Github();
 	if (!$gh->has_settings)
 		return $gh->missing_settings_msg;
 
 	$issues = $gh->get_issues($atts);
 	
-	$return = format_issues($issues, $atts['show_body']);
-	$return = prepend_page_count($return, $gh, count($issues) );
-	$return = append_page_links($return, $gh);
+	$return = WPGHPL\format_issues($issues, $atts['show_body']);
+	$return = WPGHPL\prepend_page_count($return, $gh, count($issues) );
+	$return = WPGHPL\append_page_links($return, $gh);
 
 	return $return;
 
 }
-add_shortcode( 'gh_issues', 'issues_func' );
+add_shortcode( 'gh_issues', 'wpghpl_issues_func' );
 
 
-function searchform_func( $atts ) {
+function wpghpl_searchform_func( $atts ) {
 	
-	$gh = new Github();
+	$gh = new WPGHPL_Github();
 	if (!$gh->has_settings)
 		return $gh->missing_settings_msg;
 
 	$results = NULL;
 	$msg = 'Enter a search term to begin.';
 
-	$return = build_search_form($atts['placeholder']);
+	$return = WPGHPL\build_search_form($atts['placeholder']);
 
 	if ( !empty($_GET['gh_searchterm'] )) {
 		if (strlen( $_GET['gh_searchterm'] ) < 2) {
@@ -66,10 +67,10 @@ function searchform_func( $atts ) {
 
 	$return .= '<div class="gh_searchform__msg">' . $msg . '</div>';
 
-	$return .= (!empty($issues)) ? format_issues($issues, $atts['show_body']) : NULL;
+	$return .= (!empty($issues)) ? WPGHPL\format_issues($issues, $atts['show_body']) : NULL;
 	// $return .= append_page_links($return, $gh);
 
 	return $return;
 
 }
-add_shortcode( 'gh_searchform', 'searchform_func' );
+add_shortcode( 'gh_searchform', 'wpghpl_searchform_func' );

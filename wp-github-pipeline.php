@@ -37,7 +37,7 @@ function wpghpl_plugin_options() {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 
-	handle_authentication_redirection();
+	wpghpl_handle_authentication_redirection();
 
 	$token = get_option('wpghpl_token');
 
@@ -131,7 +131,7 @@ function wpghpl_handle_save() {
 
 	#if the repo changes, remember to unset the is_public flag in the DB
 	if ($repo != get_option('wpghpl_gh_repo') ) {
-		save_repo_is_public($org, $repo);
+		wpghpl_save_repo_is_public($org, $repo);
 	}
 
 	update_option( 'wpghpl_client_id', $client_id, TRUE );
@@ -145,7 +145,7 @@ function wpghpl_handle_save() {
     exit;
 }
 
-function save_repo_is_public($user, $repo) {
+function wpghpl_save_repo_is_public($user, $repo) {
 
 	$client = new \Github\Client();
 	
@@ -186,7 +186,7 @@ function wpghpl_wrap_ng_app($content) {
  * Check for whether code and/or state params are being passed back from GitHub after 
  * user authorizes the regsitered app. If so, exchange for token and save.  
  */
-function handle_authentication_redirection() {
+function wpghpl_handle_authentication_redirection() {
 
 	#check if we're receiving the GitHub temporary code
 	$code = ( !empty($_GET['code']) ) ? $_GET['code'] : FALSE; 
