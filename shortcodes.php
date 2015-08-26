@@ -17,6 +17,8 @@ add_shortcode( 'gh_milestones', 'wpghpl_milestones_func' );
 
 function wpghpl_issues_func( $atts ) {
 
+	$show_body = ( !empty($atts['show_body']) ) ? $atts['show_body'] : FALSE;
+
 	#if a search term was entered do nothing.
 	if ( !empty($_GET['gh_searchterm']) )
 		return;
@@ -27,7 +29,7 @@ function wpghpl_issues_func( $atts ) {
 
 	$issues = $gh->get_issues($atts);
 	
-	$return = WPGHPL\format_issues($issues, $atts['show_body']);
+	$return = WPGHPL\format_issues($issues, $show_body);
 	//$return = WPGHPL\prepend_page_count($return, $gh, count($issues) );
 	$return = WPGHPL\append_page_links($return, $gh);
 
