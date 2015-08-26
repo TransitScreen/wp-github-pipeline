@@ -1,3 +1,0 @@
-[submodule "vendor/knplabs/github-api"]
-	path = vendor/knplabs/github-api
-	url = git@github.com:TransitScreen/github-api.git
