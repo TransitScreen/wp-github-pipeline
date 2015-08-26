@@ -40,7 +40,10 @@ add_shortcode( 'gh_issues', 'wpghpl_issues_func' );
 
 
 function wpghpl_searchform_func( $atts ) {
-	
+
+	$placeholder = ( !empty($atts['placeholder']) ) ? $atts['placeholder'] : FALSE;
+	$show_body = ( !empty($atts['show_body']) ) ? $atts['show_body'] : FALSE;
+
 	$gh = new WPGHPL_Github();
 	if (!$gh->has_settings)
 		return $gh->missing_settings_msg;
@@ -48,7 +51,7 @@ function wpghpl_searchform_func( $atts ) {
 	$results = NULL;
 	$msg = 'Enter a search term to begin.';
 
-	$return = WPGHPL\build_search_form($atts['placeholder']);
+	$return = WPGHPL\build_search_form($placeholder);
 
 	if ( !empty($_GET['gh_searchterm'] )) {
 		if (strlen( $_GET['gh_searchterm'] ) < 2) {
@@ -69,7 +72,7 @@ function wpghpl_searchform_func( $atts ) {
 
 	$return .= '<div class="gh_searchform__msg">' . $msg . '</div>';
 
-	$return .= (!empty($issues)) ? WPGHPL\format_issues($issues, $atts['show_body']) : NULL;
+	$return .= (!empty($issues)) ? WPGHPL\format_issues($issues, $show_body) : NULL;
 	// $return .= append_page_links($return, $gh);
 
 	return $return;
