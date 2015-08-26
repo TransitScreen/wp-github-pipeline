@@ -50,6 +50,8 @@ class WPGHPL_Github {
 
 	public function get_issues($options=array()) {
 
+		$options = (empty($options)) ? array() : $options; #if zero attributes passed, $options = ''
+		
 		$default_options = array(
 							'labels'=>'', 
 							'state'=>'open',
@@ -81,14 +83,7 @@ class WPGHPL_Github {
 
 	public function search_issues($options=array()) {
 
-	// $atts = shortcode_atts( array(
-	// 	'placeholder' => NULL,
-	// 	'type' => NULL,
-	// 	'in' => NULL,
-	// 	'labels'=>NULL,
-	// 	'state'=>NULL,
-	// 	'show_body'=>FALSE
-	// ), $atts, 'gh_searchform' );
+		$options = (empty($options)) ? array() : $options; #if zero attributes passed, $options = ''
 
 		$default_options = array(
 							'type' => NULL, # issue | pr
@@ -129,6 +124,8 @@ class WPGHPL_Github {
 	}
 
 	public function get_milestones($options=array()) {
+
+		$options = (empty($options)) ? array() : $options; #if zero attributes passed, $options = ''
 
 		$default_options = array(
 							'state'=>'open',
@@ -173,9 +170,6 @@ class WPGHPL_Github {
 	 * @return bool
 	 */
 	public function check_for_settings($error=TRUE){
-		// dump( get_option($this->prefix . 'repo_is_public') );
-		// dump( $this->repo );
-		// dump( $this->org );
 
 		if (	
 				$this->repo && 
