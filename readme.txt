@@ -35,7 +35,7 @@ Pipeline is a Wordpress plugin which allows you to create a dashboard for your g
 
 `[gh_searchform labels="foo,bar" state="ALL|open|closed"]`
 
-NOTE: The GitHub API only allows 30 calls per hour to the search API.
+NOTE: The GitHub API only allows 10 unauthenticated requests pre minute to the search API. If you register an app (required for private repositories) the limit is increased to 30 requests per minute.
 
 You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues will appear on the page until the user enters a search, then the page will display the results from the search.
 
