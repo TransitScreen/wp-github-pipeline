@@ -44,6 +44,7 @@ dependencies:
 test:
   override:
     # comment out the below line to run a code coverage report.
-    - cd $plugin_tests_dir; cd ..; pwd; composer install; ls; phpunit
+    - cd $plugin_tests_dir; cd ..; pwd; composer install; ls; phpunit:
+        timeout: 1800
     ## LINE 2/2 to uncomment if you want to run a code coverage report.
     # - cd $plugin_tests_dir; phpunit --coverage-html $CIRCLE_ARTIFACTS
