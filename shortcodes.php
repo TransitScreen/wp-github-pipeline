@@ -30,7 +30,8 @@ function wpghpl_issues_func( $atts ) {
 	$issues = $gh->get_issues($atts);
 	
 	$return = WPGHPL\format_issues($issues, $show_body);
-	//$return = WPGHPL\prepend_page_count($return, $gh, count($issues) );
+	if (!empty($atts['per_page']))
+		$return = WPGHPL\prepend_page_count($return, $gh, count($issues) );
 	$return = WPGHPL\append_page_links($return, $gh);
 
 	return $return;

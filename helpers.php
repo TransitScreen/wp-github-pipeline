@@ -164,7 +164,7 @@ function prepend_page_count( $string, $Github, $on_page_count) {
 
 	$start = ($Github->per_page)*($Github->page-1)+1;
 	$end = $start+$on_page_count-1;
-	$count = "<div class='gh-result-count'>Showing: {$start} - {$end} out of X</div>";
+	$count = "<div class='gh-result-count'>Showing: {$start} - {$end}</div>";
 
 	$newstring = $count . $string;
 
