@@ -26,7 +26,7 @@ function format_issues( $issues, $body=false ) {
 
 function format_issue($issue, $body) {
 
-	$return = '';
+	$return = '<div class="issue"';
 
 	$return .= '<h3 class="issue__title">'. htmlentities( $issue['title'] ).' #'. $issue['number'].'</h3>';
 
@@ -47,6 +47,8 @@ function format_issue($issue, $body) {
 	} else if ($body){
 		$return .= '<div class="issue__body">'.convert_markdown($issue['body'], true).'</div>';
 	}
+
+	$return .='</div><!-- .issue -->';
 
 	return $return;
 
@@ -208,10 +210,4 @@ function append_page_links($string, $Client) {
 function wpghpl_formatdate($data_str, $format=NULL) {
 	$format = ($format) ? $format : 'F j, Y';
 	return date_i18n( $format, strtotime($data_str) );
-}
-
-function dump($var) {
-	echo "<pre>";
-	var_dump($var);
-	echo "</pre>";
 }

@@ -15,7 +15,7 @@ function wpghpl_milestones_func( $atts ) {
 add_shortcode( 'gh_milestones', 'wpghpl_milestones_func' );
 
 
-function wpghpl_issues_func( $atts ) {
+function wpghpl_issues_func( $atts, $gh=NULL ) {
 
 	$show_body = ( !empty($atts['show_body']) ) ? $atts['show_body'] : FALSE;
 
@@ -23,7 +23,8 @@ function wpghpl_issues_func( $atts ) {
 	if ( !empty($_GET['gh_searchterm']) )
 		return;
 
-	$gh = new WPGHPL_Github();
+	$gh = ($gh) ? $gh : new WPGHPL_Github();
+
 	if (!$gh->has_settings)
 		return $gh->missing_settings_msg;
 

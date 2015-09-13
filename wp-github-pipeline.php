@@ -223,6 +223,13 @@ function wpghpl_handle_authentication_redirection() {
 		update_option('wpghpl_token', $data['access_token']);
 
 }
+
+function dump($var) {
+	echo "<pre>";
+	var_dump($var);
+	echo "</pre>";
+}
+
 /**
 ADD THE GITHUB CREDENTIAL FIELDS TO USER PROFILE PAGE
 */
