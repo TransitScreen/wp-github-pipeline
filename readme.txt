@@ -3,7 +3,7 @@ Contributors: TransitScreen
 Tags: GitHub, Git, dashboard, Waffle
 Requires at least: 4.2
 Tested up to: 4.3
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,3 +57,9 @@ This tool wraps the lovely [PHP GitHub API](https://github.com/KnpLabs/php-githu
   1. In the repository settings page, [Register an application](https://github.com/settings/applications/new)
   2. Copy the Client ID and Client Secret into the plugin settings page. Click the button to "Authorize Github."
 4. Add shortcodes to pages to start presenting gitHub information
+
+== Changelog ==
+
+= 1.2.1 =
+* Fixed missing ">" in issue markup
+* Better unit testing
