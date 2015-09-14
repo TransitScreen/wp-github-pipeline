@@ -26,7 +26,7 @@ function format_issues( $issues, $body=false ) {
 
 function format_issue($issue, $body) {
 
-	$return = '<div class="issue"';
+	$return = '<div class="issue">';
 
 	$return .= '<h3 class="issue__title">'. htmlentities( $issue['title'] ).' #'. $issue['number'].'</h3>';
 

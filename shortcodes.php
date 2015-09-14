@@ -29,10 +29,12 @@ function wpghpl_issues_func( $atts, $gh=NULL ) {
 		return $gh->missing_settings_msg;
 
 	$issues = $gh->get_issues($atts);
-	
+
 	$return = WPGHPL\format_issues($issues, $show_body);
-	if (!empty($atts['per_page']))
+	if (!empty($atts['per_page'])) {
+		$gh->per_page = $atts['per_page'];
 		$return = WPGHPL\prepend_page_count($return, $gh, count($issues) );
+	}
 	$return = WPGHPL\append_page_links($return, $gh);
 
 	return $return;
