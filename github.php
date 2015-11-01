@@ -69,6 +69,7 @@ class WPGHPL_Github {
 				$issues = $paginator->fetch($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
 			} else {
 				$issues = $paginator->fetchAll($this->client->api('issue'), 'all', array($this->org, $this->repo, $params));
+				$issues = apply_filters('github_issues_list', $issues);
 			}
 		} catch (Exception $e) {
 			echo "Error! " . $e->getMessage();

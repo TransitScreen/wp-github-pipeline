@@ -37,6 +37,11 @@ You can also use `[gh_searchform]` in combination with `[gh_issues]`. The issues
 
 By default, issues will not be paginated and all results will appear on a single screen. This can be cumbersome if there are a lot of screens. The optional `per_page=n` attribute will cause the results to be paginated into groups of `n` issues. The maximum size pages length is 50 (this is a quirk of the GitHub API).
 
+## Hooks
+
+* Filter: `github_issues_list` receives the list of issues returned by `[gh_issues]`. Currently it *only* applies when `per_page` attribute is not used.
+
+
 ## Tips
 * Wordpress offers many ways to manage access/privacy. But If you are setting up a tool for internal use by your team only, a plugin like [Private Only](https://wordpress.org/plugins/private-only/) may come in handy.
 

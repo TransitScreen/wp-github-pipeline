@@ -47,6 +47,32 @@ class WPGHPL_GithubTest extends WP_UnitTestCase {
 
 	}
 
+	function test_github_issues_list_filter()
+	{
 
+		add_filter('github_issue_list', 'filter_github_issues_list');
+
+		function filter_github_issues_list($issues)
+		{
+		    usort($issues, 'check_created_at');
+		    return $issues;
+		}
+
+		function check_created_at($a, $b)
+		{
+			if ($a['created_at'] == $b['created_at']){
+		        return 0;
+		    }
+		    return ($a['created_at'] < $b['created_at']) ? -1 : 1;
+		}
+
+		// Stub some issues
+
+		$gh = new WPGHPL_Github();
+		$issues = $gh->get_issues();
+
+
+		$this->markTestIncomplete();
+	}
 }
 

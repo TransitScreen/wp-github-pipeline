@@ -3,7 +3,7 @@ Contributors: TransitScreen
 Tags: GitHub, Git, dashboard, Waffle
 Requires at least: 4.2
 Tested up to: 4.3.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,10 @@ This tool wraps the lovely [PHP GitHub API](https://github.com/KnpLabs/php-githu
 4. Add shortcodes to pages to start presenting gitHub information
 
 == Changelog ==
+
+= 1.2.2 =
+* Use admin_url() instead of relative path
+* Added (all) issues filter: github_issue_list
 
 = 1.2.1 =
 * Fixed missing ">" in issue markup
