@@ -50,7 +50,7 @@ function wpghpl_plugin_options()
     }
 
     ?>
-        <form method="post" action="/wp-admin/admin-post.php">
+        <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
 
             <input type="hidden" name="action" value="update_wpghpl_settings" />
 
