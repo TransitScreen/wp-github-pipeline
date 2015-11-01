@@ -11,6 +11,7 @@ When you're ready to release a new version of the Plugin:
 ## 3 Update SVN
 
 * Copy files to SVN trunk/ 
+* Optional? `svn update trunk/*`
 * Commit them with svn: `svn ci -m 'version 1.1 changes'`
 
 ## 4 Tag the new version with svn
