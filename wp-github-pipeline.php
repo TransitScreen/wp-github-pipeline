@@ -1,8 +1,16 @@
 <?php
 
 /**
- Text Domain: wpghpl
- */
+Plugin Name: WP GitHub Pipeline
+Plugin URI: https://github.com/TransitScreen/wp-github-pipeline
+Description: Creates a custom dashboard for your GitHub projects
+Version: 1.2.3
+Author: TransitScreen
+Author URI: http://transitscreen.com/
+License: GPLv2 or later
+Text Domain: wpghpl
+*/
+
 defined('ABSPATH') or die('No script kiddies please!');
 
 # Track plugin version for future upgrades
